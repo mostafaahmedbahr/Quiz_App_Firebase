@@ -1,0 +1,7 @@
+abstract class StudentLectureStates{}
+
+class StudentLectureInitState extends StudentLectureStates{}
+
+class GetAllStudentLectureLoadingState extends StudentLectureStates{}
+class GetAllStudentLectureSuccessState extends StudentLectureStates{}
+class GetAllStudentLectureErrorState extends StudentLectureStates{}
