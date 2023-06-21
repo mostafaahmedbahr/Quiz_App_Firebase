@@ -2,7 +2,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quiz_app_new/screens/layout/cubit/states.dart';
 
-import '../../../favorite.dart';
+import '../../fav/favorite.dart';
 import '../../student_home/home.dart';
 import '../../student_profile/profile_st.dart';
 

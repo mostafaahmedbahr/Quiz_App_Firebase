@@ -1,20 +1,48 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quiz_app_new/core/toast/toast.dart';
 import 'package:quiz_app_new/screens/layout/cubit/cubit.dart';
 import 'package:quiz_app_new/screens/student_home/cubit/states.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+ import '../../Sh/shared_pref.dart';
+import '../../core/toast/toast_states.dart';
+import '../../models/fav_model.dart';
+import '../fav/cubit/cubit.dart';
 import '../layout/nav_bar.dart';
-import '../student_profile/profile_st.dart';
 import '../../conctant.dart';
 import '../student_exams/examas.dart';
 import '../students_lectuers/lecture_screen.dart';
 import '../test_bank/test_bank.dart';
 import 'cubit/cubit.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
 
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  @override
+  void initState() {
+    StudentHomeCubit.get(context).getAllVideos();
+    super.initState();
+  }
+  String? urlVideo;
+  YoutubePlayerController? controller;
+  g({
+    required String url,
+  }){
+    final videoId = YoutubePlayer.convertUrlToId("$url");
+    controller = YoutubePlayerController(
+      initialVideoId: videoId!,
+      flags: YoutubePlayerFlags(
+        autoPlay: false,
+      ),
+    );
+  }
   @override
   Widget build(BuildContext context) {
     // ignore: unused_local_variable
@@ -23,6 +51,7 @@ class Home extends StatelessWidget {
       listener:(context,state){} ,
       builder: (context,state){
         var cubit = StudentHomeCubit.get(context);
+
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 20,horizontal: 20),
           child: Column(
@@ -50,6 +79,7 @@ class Home extends StatelessWidget {
                 title: 'WELCOME',
               ),
               const SizedBox(height: 10),
+              if(cubit.studentProfileModel!=null)
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
                 child: Row(
@@ -287,41 +317,167 @@ class Home extends StatelessWidget {
                 title: 'Recomended Courses',
               ),
               const SizedBox(height: 15),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    Row(
-                        children: <Widget>[
-                      RecomandCourse(
-                        image: 'asset/image/courses.png',
-                        title: 'Course 1',
-                        press: () {},
+              StreamBuilder<QuerySnapshot<FavouriteModel>>(
+                  stream: FirebaseFirestore.instance
+                      .collection("AllUsers")
+                      .doc(SharedPreferencesHelper.getData(key: "uId"))
+                      .collection("favourite")
+                      .withConverter<FavouriteModel>(
+                    fromFirestore: (snapshot, options) {
+                      print(snapshot.data());
+                      return FavouriteModel.fromFirestore(snapshot.data()!);
+                    },
+                    toFirestore: (task, options) {
+                      return task.toFirestore();
+                    },
+                  ).snapshots(),
+                  builder: (buildContext, snapshot) {
+                    return  cubit.allVideos.length==0 ?
+                    Center(
+                      child: CircularProgressIndicator(
+                        color: myColor,
                       ),
-                      RecomandCourse(
-                        image: 'asset/image/courses.png',
-                        title: 'Course 1',
-                        press: () {},
+                    )    :
+                    SizedBox(
+                      height: 200,
+                      child: ListView.separated(
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context,index)
+                        {
+                          g(url: "${cubit.allVideos[index]["url"]}");
+                          return Stack(
+                            alignment: Alignment.topRight,
+                            children: [
+                              Container(
+                                width: MediaQuery.sizeOf(context).width*0.7,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: myColor,
+                                    width: 5,
+                                  ),
+                                ),
+                                child: YoutubePlayer(
+                                  controller: controller!,
+                                  showVideoProgressIndicator: true,
+                                  bottomActions: [
+                                    CurrentPosition(),
+                                    ProgressBar(
+                                      isExpanded: true,
+                                      colors: ProgressBarColors(
+                                        handleColor: Colors.white,
+                                        playedColor: myColor,
+                                      ),
+                                    ),
+                                    RemainingDuration(),
+                                    PlaybackSpeedButton(),
+                                  ],
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: (){
+                                  if(FavCubit.get(context).favList.any((element) =>element.id == cubit.allVideos[index]["id"])){
+                                    ToastConfig.showToast(
+                                      msg: "this product already in fav ..",
+                                      toastStates: ToastStates.Success,
+                                    );
+                                    // cubit.add(DeleteProductFromFavorite(id:  widget.model.productId,));
+                                  }else{
+                                    FavCubit.get(context).addToFav(
+                                        favouriteModel: FavouriteModel(
+                                          videoUrl: cubit.allVideos[index]["url"],
+                                          title: cubit.allVideos[index]["title"],
+                                          userId: SharedPreferencesHelper.getData(key: "uId"),
+                                          id:cubit.allVideos[index]["id"],
+                                        )
+                                    );
+                                    ToastConfig.showToast(
+                                      msg: "this product is added to fav ..",
+                                      toastStates: ToastStates.Success,
+                                    );
+
+                                  }
+
+                                },
+                                icon:
+                                FavCubit.get(context).favList.any((element) =>element.id == cubit.allVideos[index]["id"]) ?
+                                Icon(Icons.favorite,
+                                  size: 30,
+                                  color:
+                                  Colors.red,
+                                ):
+                                Icon(Icons.favorite_border,
+                                  size: 30,
+                                  color:
+                                  Colors.red,
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                        separatorBuilder: (context,index){
+                          return SizedBox(width: 30,);
+                        },
+                        itemCount: cubit.allVideos.length,
                       ),
-                      RecomandCourse(
-                        image: 'asset/image/courses.png',
-                        title: 'Course 1',
-                        press: () {},
-                      ),
-                      RecomandCourse(
-                        image: 'asset/image/courses.png',
-                        title: 'Course 1',
-                        press: () {},
-                      ),
-                    ]),
-                  ],
-                ),
-              )
+                    );
+                  }
+
+              ),
+
+              // ConditionalBuilder(
+              //   condition: state is  GetAllVidoesSuccessState,
+              //   fallback: (context)=>Center(
+              //     child: CircularProgressIndicator(
+              //       color: myColor,
+              //     ),
+              //   ),
+              //   builder: (context){
+              //     return SizedBox(
+              //       height: 200,
+              //       child: ListView.separated(
+              //         scrollDirection: Axis.horizontal,
+              //         itemBuilder: (context,index)
+              //         {
+              //           g(url: "${cubit.allVideos[index]["url"]}");
+              //           return   Container(
+              //             decoration: BoxDecoration(
+              //               border: Border.all(
+              //                 color: myColor,
+              //                 width: 5,
+              //               ),
+              //             ),
+              //             child: YoutubePlayer(
+              //               controller: controller!,
+              //               showVideoProgressIndicator: true,
+              //               bottomActions: [
+              //                 CurrentPosition(),
+              //                 ProgressBar(
+              //                   isExpanded: true,
+              //                   colors: ProgressBarColors(
+              //                     handleColor: Colors.white,
+              //                     playedColor: myColor,
+              //                   ),
+              //                 ),
+              //                 RemainingDuration(),
+              //                 PlaybackSpeedButton(),
+              //               ],
+              //             ),
+              //           );
+              //         },
+              //         separatorBuilder: (context,index){
+              //           return SizedBox(width: 20,);
+              //         },
+              //         itemCount: 10,
+              //       ),
+              //     );
+              //   },
+              //
+              // )
             ],
           ),
         );
       } ,
-     
+
     );
   }
 }

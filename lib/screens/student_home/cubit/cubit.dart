@@ -31,4 +31,22 @@ class StudentHomeCubit extends Cubit<StudentHomeStates> {
     });
   }
 
+
+  List allVideos = [];
+  getAllVideos()
+  async {
+    emit(GetAllVidoesLoadingState());
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection("youtube_videos").get();
+    FirebaseFirestore.instance.collection("youtube_videos").get().then((value)
+    {
+      allVideos = querySnapshot.docs.map((doc) => doc.data()).toList();
+      print(allVideos);
+      emit(GetAllVidoesSuccessState());
+    }).catchError((error)
+    {
+      print("error in get all youtube_videos pdf data ${error.toString()}");
+      emit(GetAllVidoesErrorState());
+    });
+  }
+
 }

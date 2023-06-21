@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../student_profile/profile_st.dart';
 import '../../conctant.dart';
-import '../../favorite.dart';
+import '../fav/favorite.dart';
 import '../student_home/home.dart';
 import 'cubit/cubit.dart';
 import 'cubit/states.dart';

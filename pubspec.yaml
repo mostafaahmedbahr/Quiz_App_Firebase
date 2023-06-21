@@ -54,6 +54,11 @@ dependencies:
   firebase_messaging:
   path_provider: ^2.0.14
   dio: ^4.0.0
+  firebase_app_check:
+  flutter_file_downloader: ^1.1.2
+  youtube_player_flutter: ^8.1.2
+  flutter_slidable: ^3.0.0
+
 
 dev_dependencies:
   flutter_test:
