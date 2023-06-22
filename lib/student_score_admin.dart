@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'prof_admin.dart';
+import 'screens/administrator_screens/admin_home/admin_home.dart';
 class Data {
   final String studentName;
   final int studentNumber;
@@ -58,7 +58,7 @@ class _ExamResState extends State<ExamRes> {
               IconButton(
                 onPressed: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => const Admin()));
+                      MaterialPageRoute(builder: (_) => const AdminHome()));
                 },
                 icon: const Icon(Icons.arrow_back),
                 color: myColor,

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'login_admin.dart';
+import 'screens/administrator_screens/admin_login/login_admin.dart';
 import 'screens/login/loginSt.dart';
 class OriginalButton extends StatelessWidget {
   final String text;

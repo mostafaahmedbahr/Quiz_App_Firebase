@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'prof_admin.dart';
+import 'screens/administrator_screens/admin_home/admin_home.dart';
 
 // ignore: must_be_immutable
 class SuccesExam extends StatefulWidget {
@@ -51,7 +51,7 @@ class _SuccesExamState extends State<SuccesExam> {
                           borderRadius: BorderRadius.circular(15))),
                   onPressed: () {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (_) =>  Admin()));
+                        MaterialPageRoute(builder: (_) =>  AdminHome()));
                   },
                   child: const Text(
                     'Back',

@@ -4,6 +4,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quiz_app_new/screens/administrator_screens/admin_home/cubit/cubit.dart';
+import 'package:quiz_app_new/screens/administrator_screens/admin_login/login_cubit/cubit.dart';
+import 'package:quiz_app_new/screens/administrator_screens/create_new_exam/cubit/cubit.dart';
 import 'package:quiz_app_new/screens/fav/cubit/cubit.dart';
 import 'package:quiz_app_new/screens/layout/cubit/cubit.dart';
 import 'package:quiz_app_new/screens/login/login_cubit/cubit.dart';
@@ -48,6 +51,9 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => LoginCubit()),
+        BlocProvider(create: (context) => AdminLoginCubit()),
+        BlocProvider(create: (context) => AdminHomeCubit()..getUserDataInHome()),
+        BlocProvider(create: (context) => CreateNewExamCubit() ),
         BlocProvider(create: (context) => NavBarCubit()),
         BlocProvider(
           create: (context) => StudentHomeCubit()..getUserDataInHome()..getAllVideos(),

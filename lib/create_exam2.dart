@@ -1,10 +1,19 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quiz_app_new/Sh/shared_pref.dart';
+import 'package:quiz_app_new/core/toast/toast.dart';
+import 'package:quiz_app_new/screens/administrator_screens/create_new_exam/cubit/cubit.dart';
+import 'package:quiz_app_new/screens/administrator_screens/create_new_exam/cubit/states.dart';
 
+import 'core/constants.dart';
 import 'exam_success.dart';
 
 class CreateExam2 extends StatefulWidget {
-  const CreateExam2({Key? key}) : super(key: key);
-
+  const CreateExam2({Key? key, required this.examName, required this.administratorCode, required this.examPassword}) : super(key: key);
+  final String examName;
+  final String administratorCode;
+  final String examPassword;
   @override
   State<CreateExam2> createState() => _CreateExam2State();
 }
@@ -16,7 +25,7 @@ class _CreateExam2State extends State<CreateExam2> {
   final correctAnswerController = TextEditingController();
   int _nextQuestionId = 1;
   final Color c = const Color.fromRGBO(99, 9, 167, 1);
-  final List<Question> questions = [];
+  final List<Question> questions = [ ];
 
   void _addFields() {
     setState(() {
@@ -27,51 +36,98 @@ class _CreateExam2State extends State<CreateExam2> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        margin: const EdgeInsets.all(10),
-        color: const Color.fromRGBO(241, 241, 241, 1),
-        child: ListView(
-          children: [
-            buildText('Add Questions', 35),
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: questions.length,
-              itemBuilder: (context, index) {
-                return QuestionWidget(
-                  question: questions[index],
-                  onAnswerChanged: (answers) {
-                    setState(() {
-                      questions[index].answers = answers;
-                    });
-                  },
-                  onCorrectAnswerChanged: (correctAnswer) {
-                    setState(() {
-                      questions[index].correctAnswer = correctAnswer;
-                    });
-                  },
-                );
-              },
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  buildElevatedButton('Add More Questions', _addFields),
-                  buildElevatedButton('Finish', () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => SuccesExam()),
+    return BlocConsumer<CreateNewExamCubit,CreateNewExamStates>(
+      listener: (context,state){},
+      builder:  (context,state){
+        var cubit = CreateNewExamCubit.get(context);
+        return Scaffold(
+          appBar: AppBar(
+            backgroundColor: myColor,
+            title:buildText('Add Questions', 25),
+          ),
+          body: Container(
+            margin: const EdgeInsets.all(10),
+            color: const Color.fromRGBO(241, 241, 241, 1),
+            child: ListView(
+              children: [
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: questions.length,
+                  itemBuilder: (context, index) {
+                    return QuestionWidget(
+                      question: questions[index],
+                      onAnswerChanged: (answers) {
+                        setState(() {
+                          questions[index].answers = answers;
+                        });
+                      },
+                      onCorrectAnswerChanged: (correctAnswer) {
+                        setState(() {
+                          questions[index].correctAnswer = correctAnswer;
+                        });
+                      },
                     );
-                  }),
-                ],
-              ),
+                  },
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      buildElevatedButton('Add More Questions', _addFields),
+                      buildElevatedButton('Finish', () async {
+                        final CollectionReference examsRef = FirebaseFirestore.instance.collection('exams');
+                        final examData = {
+                          'examName': widget.examName,
+                          'administratorCode': widget.administratorCode,
+                          'examPassword': widget.examPassword,
+                          'questions': questions.map((q) => {
+                            'id': q.id,
+                            'question': q.question,
+                            'answers': q.answers,
+                            'correctAnswer': q.correctAnswer,
+                          }).toList(),
+                        };
+                        try {
+                          // Add the exam data to Firestore
+                          await examsRef.doc(SharedPreferencesHelper.getData(key: "AdminUId")).set(examData);
+                          // Navigate to the success screen
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => SuccesExam()),
+                          );
+                        } catch (e) {
+                          // Show an error message if adding the data to Firestore fails
+                          print('Failed to add exam data to Firestore.');
+                        }
+                        print(questions[0].question);
+                        print(questions[0].answers);
+                        print(questions[0].correctAnswer);
+                        print(questions[0].id);
+                        // cubit.addNewExam(
+                        //   examPassword: examPassword,
+                        //   examName: examName,
+                        //   adminCode: ,
+                        //   id: ,
+                        //   answers: ,
+                        //   correctAnswers: ,
+                        //   questions: questions,
+                        // );
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(builder: (context) => SuccesExam()),
+                        // );
+                      }),
+                    ],
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
+     
     );
   }
 
@@ -79,7 +135,7 @@ class _CreateExam2State extends State<CreateExam2> {
       {TextAlign alignment = TextAlign.center}) {
     final color = const Color(0xFF6309A7);
     final style = TextStyle(
-      color: color,
+      color: Colors.white,
       fontSize: fontSize,
       fontWeight: FontWeight.bold,
     );
@@ -128,6 +184,7 @@ class QuestionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -149,10 +206,13 @@ class QuestionWidget extends StatelessWidget {
                 (index) => buildTextFormField(
               question.answers[index],
               'Expected Answer ${index + 1}',
-                  (value) {
-                onAnswerChanged(question.answers);
+                  (  value) {
+                print(value);
+                question.answers[index] = value;
+                print(question.answers[index]);
+                // onAnswerChanged(value);
               },
-            ),
+            ) ,
           ),
         ),
         const SizedBox(height: 20),
@@ -173,7 +233,7 @@ class QuestionWidget extends StatelessWidget {
   }
 
   Padding buildTextFormField(
-      String initialValue, String hintText, ValueChanged<String> onChanged) {
+      String initialValue, String hintText, ValueChanged<String> onChanged, ) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextFormField(

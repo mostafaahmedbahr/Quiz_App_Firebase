@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../conctant.dart';
 import '../login/loginSt.dart';
-import '../../login_admin.dart';
+import '../administrator_screens/admin_login/login_admin.dart';
 
 class MyStartPage extends StatefulWidget {
   const MyStartPage({Key? key}) : super(key: key);
