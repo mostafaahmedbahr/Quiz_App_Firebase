@@ -13,7 +13,6 @@ import '../../core/constants.dart';
 import '../../core/toast/toast.dart';
 import '../student_home/cubit/cubit.dart';
 import 'no_fav.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 
 class FavoritePage extends StatefulWidget {
   @override

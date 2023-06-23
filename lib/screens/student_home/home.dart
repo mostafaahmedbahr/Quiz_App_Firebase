@@ -12,7 +12,7 @@ import '../../models/fav_model.dart';
 import '../fav/cubit/cubit.dart';
 import '../layout/nav_bar.dart';
 import '../../conctant.dart';
-import '../student_exams/examas.dart';
+ import '../student_quiz/examas.dart';
 import '../students_lectuers/lecture_screen.dart';
 import '../test_bank/test_bank.dart';
 import 'cubit/cubit.dart';

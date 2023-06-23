@@ -1,13 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:quiz_app_new/Sh/shared_pref.dart';
+ import 'package:quiz_app_new/core/nav.dart';
 import 'package:quiz_app_new/core/toast/toast.dart';
 import 'package:quiz_app_new/screens/administrator_screens/create_new_exam/cubit/cubit.dart';
 import 'package:quiz_app_new/screens/administrator_screens/create_new_exam/cubit/states.dart';
 
-import 'core/constants.dart';
-import 'exam_success.dart';
+ import 'exam_success.dart';
+
+
 
 class CreateExam2 extends StatefulWidget {
   const CreateExam2({Key? key, required this.examName, required this.administratorCode, required this.examPassword}) : super(key: key);
@@ -37,7 +39,16 @@ class _CreateExam2State extends State<CreateExam2> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<CreateNewExamCubit,CreateNewExamStates>(
-      listener: (context,state){},
+      listener: (context,state){
+        if(state is AddNewExamSuccessState){
+          AppNav.customNavigator(
+              context: context,
+              screen: SuccesExam(),
+              finish: true,
+          );
+
+        }
+      },
       builder:  (context,state){
         var cubit = CreateNewExamCubit.get(context);
         return Scaffold(
@@ -76,49 +87,43 @@ class _CreateExam2State extends State<CreateExam2> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       buildElevatedButton('Add More Questions', _addFields),
-                      buildElevatedButton('Finish', () async {
-                        final CollectionReference examsRef = FirebaseFirestore.instance.collection('exams');
-                        final examData = {
-                          'examName': widget.examName,
-                          'administratorCode': widget.administratorCode,
-                          'examPassword': widget.examPassword,
-                          'questions': questions.map((q) => {
-                            'id': q.id,
-                            'question': q.question,
-                            'answers': q.answers,
-                            'correctAnswer': q.correctAnswer,
-                          }).toList(),
-                        };
-                        try {
-                          // Add the exam data to Firestore
-                          await examsRef.doc(SharedPreferencesHelper.getData(key: "AdminUId")).set(examData);
-                          // Navigate to the success screen
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => SuccesExam()),
+                      ConditionalBuilder(
+                        condition: state is ! AddNewExamLoadingState,
+                        fallback: (context)=>Center(
+                          child: CircularProgressIndicator(
+                            color: myColor,
+                          ),
+                        ),
+                        builder: (context){
+                          return buildElevatedButton('Finish', () async {
+                          cubit.addExamToFirebase(
+
+                              examName: widget.examName,
+                              administratorCode: widget.administratorCode,
+                              examPassword: widget.examPassword,
+                              questions: questions,
                           );
-                        } catch (e) {
-                          // Show an error message if adding the data to Firestore fails
-                          print('Failed to add exam data to Firestore.');
-                        }
-                        print(questions[0].question);
-                        print(questions[0].answers);
-                        print(questions[0].correctAnswer);
-                        print(questions[0].id);
-                        // cubit.addNewExam(
-                        //   examPassword: examPassword,
-                        //   examName: examName,
-                        //   adminCode: ,
-                        //   id: ,
-                        //   answers: ,
-                        //   correctAnswers: ,
-                        //   questions: questions,
-                        // );
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(builder: (context) => SuccesExam()),
-                        // );
-                      }),
+                          print(questions[0].question);
+                          print(questions[0].answers);
+                          print(questions[0].correctAnswer);
+                          print(questions[0].id);
+                          // cubit.addNewExam(
+                          //   examPassword: examPassword,
+                          //   examName: examName,
+                          //   adminCode: ,
+                          //   id: ,
+                          //   answers: ,
+                          //   correctAnswers: ,
+                          //   questions: questions,
+                          // );
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(builder: (context) => SuccesExam()),
+                          // );
+                        });
+                        },
+                      ),
+
                     ],
                   ),
                 ),

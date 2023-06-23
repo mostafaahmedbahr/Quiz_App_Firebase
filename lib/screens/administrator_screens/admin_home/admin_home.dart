@@ -7,7 +7,7 @@ import 'package:quiz_app_new/screens/administrator_screens/admin_home/cubit/cubi
 import 'package:quiz_app_new/screens/administrator_screens/admin_home/cubit/states.dart';
 
 import '../../../conctant.dart';
-import '../../../create new exam.dart';
+import '../create_new_exam/create new exam.dart';
 import '../../../showExamResult.dart';
 import '../../start/start.dart';
 

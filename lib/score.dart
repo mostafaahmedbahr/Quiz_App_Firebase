@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:quiz_app_new/core/toast/toast.dart';
+import 'package:quiz_app_new/screens/student_quiz/examas.dart';
 import 'conctant.dart';
-import 'screens/student_exams/examas.dart';
 
 class ScorePage extends StatelessWidget {
   final int score;
@@ -17,22 +18,13 @@ class ScorePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kBackgroundColor,
+      appBar: AppBar(
+        backgroundColor: myColor,
+      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 32.0, left: 16.0),
-            child: InkWell(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: Icon(
-                Icons.arrow_back,
-                color: kTextColor,
-                size: 20,
-              ),
-            ),
-          ),
+
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

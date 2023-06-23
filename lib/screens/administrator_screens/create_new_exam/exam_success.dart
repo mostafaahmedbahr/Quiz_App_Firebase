@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'screens/administrator_screens/admin_home/admin_home.dart';
+import '../admin_home/admin_home.dart';
+ import 'package:cached_network_image/cached_network_image.dart';
 
 // ignore: must_be_immutable
 class SuccesExam extends StatefulWidget {
@@ -26,12 +27,14 @@ class _SuccesExamState extends State<SuccesExam> {
               Stack(alignment: AlignmentDirectional.center, children: [
                 buildContainer(167, 167, p),
                 buildContainer(135, 135, y),
-                const Image(
-                    image: NetworkImage(
-                        'https://cdn3.iconfinder.com/data/icons/faticons/32/done-01-512.png'),
+                CachedNetworkImage(
+                  imageUrl: "https://cdn3.iconfinder.com/data/icons/faticons/32/done-01-512.png",
                     color: Colors.white,
                     height: 70,
-                    width: 70)
+                    width: 70,
+                  placeholder: (context, url) => CircularProgressIndicator(),
+                  errorWidget: (context, url, error) => Icon(Icons.error),
+                ),
               ]),
               Text('Thank You!',
                   style: TextStyle(

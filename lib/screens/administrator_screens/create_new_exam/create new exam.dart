@@ -4,7 +4,7 @@ import 'package:quiz_app_new/screens/administrator_screens/create_new_exam/cubit
 import 'package:quiz_app_new/screens/administrator_screens/create_new_exam/cubit/states.dart';
 
 import 'create_exam2.dart';
-import 'originalButton.dart';
+import '../../../originalButton.dart';
 
 // ignore: must_be_immutable
 class CreateNewExam extends StatelessWidget {
@@ -68,6 +68,15 @@ class CreateNewExam extends StatelessWidget {
                             'Enter PassWord', pController, myColor, (val) {
                           return "please enter the password ";
                         }),
+                        // buildText(
+                        //   str: 'Exam Date',
+                        //   fontSize: 20,
+                        //   myColor: myColor,
+                        // ),
+                        // buildTextFormField(
+                        //     'Enter Exam Date', eController, myColor, (val) {
+                        //   return "please enter the Date ";
+                        // }),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: OriginalButton(
