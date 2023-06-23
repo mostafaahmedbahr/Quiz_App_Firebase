@@ -58,6 +58,7 @@ dependencies:
   flutter_file_downloader: ^1.1.2
   youtube_player_flutter: ^8.1.2
   cached_network_image: ^3.2.3
+  flutter_windowmanager: ^0.2.0
 
 
 dev_dependencies:

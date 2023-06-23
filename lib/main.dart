@@ -17,6 +17,7 @@ import 'package:responsive_framework/utils/scroll_behavior.dart';
 import 'Sh/bloc_observer.dart';
 import 'Sh/shared_pref.dart';
 import 'screens/splash/splash_screen.dart';
+import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
@@ -25,6 +26,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
   await SharedPreferencesHelper.init();
   await Firebase.initializeApp();
   FirebaseAppCheck.instance.activate();
