@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quiz_app_new/core/nav.dart';
 import 'package:quiz_app_new/core/toast/toast.dart';
 import 'package:quiz_app_new/screens/student_quiz/examas.dart';
 import 'conctant.dart';
@@ -47,7 +48,8 @@ class ScorePage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Image.asset(
-                      score >= 50
+
+                score > (totalQuestions / 2)
                           ? 'asset/image/exams.png'
                           : 'asset/image/felid.png',
                       width: 343,
@@ -67,10 +69,11 @@ class ScorePage extends StatelessWidget {
                     SizedBox(height: 32),
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => Examas()),
-                        );
+                      AppNav.customNavigator(
+                          context: context,
+                          screen: Examas(),
+                          finish: true,
+                      );
                       },
 
                       child: Text(
