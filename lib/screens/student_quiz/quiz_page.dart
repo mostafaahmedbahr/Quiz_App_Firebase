@@ -1,6 +1,7 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:quiz_app_new/core/nav.dart';
 import 'package:quiz_app_new/core/toast/toast.dart';
 import 'package:quiz_app_new/screens/student_quiz/cubit/states.dart';
@@ -14,6 +15,14 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
+
+  int _seconds = 60;
+  int? _endTime;
+
+  void _startTimer() {
+    _endTime = DateTime.now().millisecondsSinceEpoch + _seconds * 1000;
+    setState(() {});
+  }
   int questionNumber = 1;
   int _currentQuestionIndex = 0;
   // List<String> questions = [
@@ -39,7 +48,11 @@ class _QuizPageState extends State<QuizPage> {
   //   ]
   // ];
   List<dynamic> selectedOption = [];
-
+  @override
+  void initState() {
+    _startTimer();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -52,6 +65,26 @@ class _QuizPageState extends State<QuizPage> {
         backgroundColor: kBackgroundColor,
         appBar: AppBar(
           backgroundColor: myColor,
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(top: 20,right: 20),
+              child: CountdownTimer(
+                endTime: _endTime,
+                onEnd: () {
+                  // عند انتهاء المؤقت، اذهب إلى الشاشة التالية
+                  AppNav.customNavigator(
+                    context: context,
+                    screen: ScorePage(
+                      score: cubit.score,
+                      correctAnswers: cubit.score,
+                      totalQuestions: cubit.allQuiz[0]["questions"].length,
+                    ),
+                    finish: true,
+                  );
+                },
+              ),
+            ),
+          ],
         ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
