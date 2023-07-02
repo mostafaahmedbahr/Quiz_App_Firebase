@@ -11,7 +11,31 @@ import 'cubit/states.dart';
 
 class StudentProfile extends StatelessWidget {
   const StudentProfile({super.key});
+  showAlertDialog(BuildContext context, String score) {
+    Widget okButton = TextButton(
+      child: Text("OK"),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
 
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("My Score"),
+      content: Text(score),
+      actions: [
+        okButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -190,7 +214,7 @@ class StudentProfile extends StatelessWidget {
                             ),
                             trailing: const Icon(Icons.arrow_right),
                             onTap: () {
-
+                              showAlertDialog(context,"${cubit.allStudentAnswers[0]["correctAnswer"]} / ${cubit.allStudentAnswers[0]["total_questions"]}");
                             },
                           ),
                           ListTile(
