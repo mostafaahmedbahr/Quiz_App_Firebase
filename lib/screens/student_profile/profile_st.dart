@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quiz_app_new/core/nav.dart';
 import 'package:quiz_app_new/screens/start/start.dart';
+import 'package:quiz_app_new/screens/student_profile/student_answers_review_screen.dart';
  import '../../conctant.dart';
 import '../../core/toast/toast.dart';
 import 'cubit/cubit.dart';
@@ -165,7 +166,9 @@ class StudentProfile extends StatelessWidget {
                             leading: CircleAvatar(
                               backgroundColor: Colors.purple[50],
                               child: IconButton(
-                                onPressed: () {},
+                                onPressed: () {
+
+                                },
                                 icon: Icon(
                                   Icons.dataset,
                                   color: Colors.purple[100],
@@ -186,7 +189,9 @@ class StudentProfile extends StatelessWidget {
                               ),
                             ),
                             trailing: const Icon(Icons.arrow_right),
-                            onTap: () {},
+                            onTap: () {
+
+                            },
                           ),
                           ListTile(
                             leading: CircleAvatar(
@@ -213,7 +218,13 @@ class StudentProfile extends StatelessWidget {
                               ),
                             ),
                             trailing: const Icon(Icons.arrow_right),
-                            onTap: () {},
+                            onTap: () {
+                              AppNav.customNavigator(
+                                context: context,
+                                screen: StudentAnswersReviewScreen(),
+                                finish: false,
+                              );
+                            },
                           ),
                           ListTile(
                             leading: CircleAvatar(

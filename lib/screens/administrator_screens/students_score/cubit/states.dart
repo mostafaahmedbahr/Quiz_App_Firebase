@@ -1,0 +1,7 @@
+abstract class ShowStudentsScoreStates{}
+
+class ShowStudentsScoreInitState extends ShowStudentsScoreStates{}
+
+class GetAllStudentsScoreLoadingState extends ShowStudentsScoreStates{}
+class GetAllStudentsScoreSuccessState extends ShowStudentsScoreStates{}
+class GetAllStudentsScoreErrorState extends ShowStudentsScoreStates{}

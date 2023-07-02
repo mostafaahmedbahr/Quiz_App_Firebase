@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
-import 'originalButton.dart';
+import '../../../widgets/originalButton.dart';
 import 'student_score_admin.dart';
 
 class StudentScore extends StatefulWidget {
-  const StudentScore({super.key});
+  const StudentScore({super.key, });
 
+  // final String examName;
+  // final String examPassword;
   @override
   State<StudentScore> createState() => _StudentScoreState();
 }
@@ -14,6 +16,12 @@ class _StudentScoreState extends State<StudentScore> {
   Color myColor = const Color.fromRGBO(88, 17, 142, 0.8);
   final TextEditingController eController = TextEditingController();
   final TextEditingController cController = TextEditingController();
+
+  @override
+  void initState() {
+
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,12 +60,12 @@ class _StudentScoreState extends State<StudentScore> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             buildText(
-                              str: "Exam's Number",
+                              str: "Exam's Name",
                               fontSize: 20,
                               myColor: myColor,
                             ),
                             buildTextFormField(
-                                "Enter Exam's Number", eController, myColor),
+                                "Enter Exam's Name", eController, myColor),
                             buildText(
                                 str: "Exam's Result Password",
                                 fontSize: 20,
@@ -69,10 +77,15 @@ class _StudentScoreState extends State<StudentScore> {
                               child: OriginalButton(
                                 text: 'View Results',
                                 onPressed: () {
+                                  eController.text = "ggg";
+                                  cController.text = "asas";
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (_) => const ExamRes()));
+                                          builder: (_) =>   ExamRes(
+                                            examName: eController.text,
+                                            examPassword: cController.text,
+                                          )));
                                 },
                                 bgcolor: const Color.fromRGBO(164, 94, 217, 1),
                                 textColor: Colors.white,

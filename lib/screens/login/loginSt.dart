@@ -95,7 +95,7 @@ class _LoginStState extends State<LoginSt> {
                         builder: (context){
                           return buildElevatedButton(context, 'Sign in',
                                 (){
-                              eController.text = "m@gmail.com";
+                              eController.text = "asmaa@gmail.com";
                               pController.text = "123456";
                               if(formKey.currentState!.validate()){
                                 cubit.login(

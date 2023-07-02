@@ -26,7 +26,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
+  // await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
   await SharedPreferencesHelper.init();
   await Firebase.initializeApp();
   FirebaseAppCheck.instance.activate();

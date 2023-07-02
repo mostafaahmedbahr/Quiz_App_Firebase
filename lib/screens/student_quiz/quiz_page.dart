@@ -4,9 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:quiz_app_new/core/nav.dart';
 import 'package:quiz_app_new/core/toast/toast.dart';
+import 'package:quiz_app_new/screens/student_home/cubit/cubit.dart';
 import 'package:quiz_app_new/screens/student_quiz/cubit/states.dart';
  import '../../conctant.dart';
- import '../../score.dart';
+ import '../../models/exam_model.dart';
+import 'score.dart';
 import 'cubit/cubit.dart';
 
 class QuizPage extends StatefulWidget {
@@ -16,7 +18,7 @@ class QuizPage extends StatefulWidget {
 
 class _QuizPageState extends State<QuizPage> {
 
-  int _seconds = 60;
+  int _seconds = 6000000;
   int? _endTime;
 
   void _startTimer() {
@@ -53,6 +55,7 @@ class _QuizPageState extends State<QuizPage> {
     _startTimer();
     super.initState();
   }
+  final List<Question> studentAnswers = [ ];
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -174,6 +177,7 @@ class _QuizPageState extends State<QuizPage> {
                                           groupValue: selectedOption[index],
                                           onChanged: (value) {
                                             setState(() {
+                                              // studentAnswers[0].questionAnswers!.add(value);
                                               selectedOption[index] = value!;
                                               if(value==cubit.allQuiz[0]["questions"][index]["correctAnswer"]){
                                                 cubit.score++;
@@ -196,6 +200,7 @@ class _QuizPageState extends State<QuizPage> {
                                           groupValue: selectedOption[index],
                                           onChanged: (value) {
                                             setState(() {
+                                              // studentAnswers[0].questionAnswers!.add(value);
                                               selectedOption[index] = value!;
                                               if(value==cubit.allQuiz[0]["questions"][index]["correctAnswer"]){
                                                 cubit.score++;
@@ -222,6 +227,7 @@ class _QuizPageState extends State<QuizPage> {
                                               if(value==cubit.allQuiz[0]["questions"][index]["correctAnswer"]){
                                                 cubit.score++;
                                               };
+                                              // studentAnswers[0].questionAnswers!.add(value);
                                             });
                                           },
                                         ),
@@ -243,6 +249,7 @@ class _QuizPageState extends State<QuizPage> {
                         child: ElevatedButton(
                           onPressed: () {
                             print(selectedOption);
+                            print(cubit.allQuiz[0]["questions"]);
                             print(cubit.score);
                               showDialog(
                                 context: context,
@@ -253,6 +260,26 @@ class _QuizPageState extends State<QuizPage> {
                                     actions: <Widget>[
                                       TextButton(
                                         onPressed: () {
+                                          print(cubit.score);
+                                          print(StudentHomeCubit.get(context).studentProfileModel!.name);
+                                          cubit.storeStudentScore(
+                                            studentAnswers: selectedOption,
+                                            questions: cubit.allQuiz[0]["questions"],
+                                            studentName:  StudentHomeCubit.get(context).studentProfileModel!.name!=null ?
+                                            "${StudentHomeCubit.get(context).studentProfileModel!.name}" :
+                                            'Shimaa Ahmed',
+                                            studentCode: StudentHomeCubit.get(context).studentProfileModel!.grade!=null ?
+                                            "${StudentHomeCubit.get(context).studentProfileModel!.grade}" :
+                                            '150177',
+                                            studentImage: StudentHomeCubit.get(context).studentProfileModel!.image!=null ?
+                                            "${StudentHomeCubit.get(context).studentProfileModel!.image}" :
+                                            '',
+                                            examName: cubit.allQuiz[0]["examName"],
+                                            examPassword: cubit.allQuiz[0]["examPassword"],
+                                            administratorCode: cubit.allQuiz[0]["administratorCode"],
+                                            correctAnswers: cubit.score,
+                                           totalQuestions: cubit.allQuiz[0]["questions"].length,
+                                          );
                                           AppNav.customNavigator(
                                               context: context,
                                               screen: ScorePage(

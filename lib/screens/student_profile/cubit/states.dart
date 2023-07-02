@@ -7,3 +7,7 @@ class GetStudentProfileDataSuccessState extends StudentProfileStates{}
 class GetStudentProfileDataErrorState extends StudentProfileStates{}
 
 class LogoutSuccessState extends StudentProfileStates{}
+
+class GetAllStudentsScoreLoadingState extends StudentProfileStates{}
+class GetAllStudentsScoreSuccessState extends StudentProfileStates{}
+class GetAllStudentsScoreErrorState extends StudentProfileStates{}

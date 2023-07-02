@@ -8,7 +8,7 @@ import 'package:quiz_app_new/screens/administrator_screens/admin_home/cubit/stat
 
 import '../../../conctant.dart';
 import '../create_new_exam/create new exam.dart';
-import '../../../showExamResult.dart';
+import '../students_score/showExamResult.dart';
 import '../../start/start.dart';
 
 class AdminHome extends StatefulWidget {
@@ -148,7 +148,9 @@ class _AdminHomeState extends State<AdminHome> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (_) => const StudentScore()));
+                                builder: (_) =>   StudentScore(
+
+                                )));
                       },
                       child: buildContainer('Student Score',
                           'https://cdn1.iconfinder.com/data/icons/school-224/512/A_Exam-512.png'),

@@ -4,7 +4,7 @@ import 'package:quiz_app_new/screens/administrator_screens/create_new_exam/cubit
 import 'package:quiz_app_new/screens/administrator_screens/create_new_exam/cubit/states.dart';
 
 import 'create_exam2.dart';
-import '../../../originalButton.dart';
+import '../../../widgets/originalButton.dart';
 
 // ignore: must_be_immutable
 class CreateNewExam extends StatelessWidget {
