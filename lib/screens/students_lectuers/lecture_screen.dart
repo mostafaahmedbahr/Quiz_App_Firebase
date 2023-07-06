@@ -1,18 +1,13 @@
-import 'dart:io';
 
-import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_pdfview/flutter_pdfview.dart';
-import 'package:path_provider/path_provider.dart';
+
 import 'package:quiz_app_new/core/toast/toast.dart';
 import 'package:quiz_app_new/screens/students_lectuers/cubit/cubit.dart';
 import 'package:quiz_app_new/screens/students_lectuers/cubit/states.dart';
 import '../../conctant.dart';
-import '../pdf_view.dart';
-import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
-import 'package:flutter_file_downloader/flutter_file_downloader.dart';
+
 
 class Lecture extends StatefulWidget {
   const Lecture({Key? key}) : super(key: key);

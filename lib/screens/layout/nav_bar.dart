@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../student_profile/profile_st.dart';
-import '../../conctant.dart';
-import '../fav/favorite.dart';
-import '../student_home/home.dart';
+ import '../../conctant.dart';
+
 import 'cubit/cubit.dart';
 import 'cubit/states.dart';
 class Layout extends StatefulWidget {

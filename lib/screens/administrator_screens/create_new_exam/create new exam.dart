@@ -8,11 +8,12 @@ import '../../../widgets/originalButton.dart';
 
 // ignore: must_be_immutable
 class CreateNewExam extends StatelessWidget {
+    CreateNewExam({Key? key , required this.examType}) : super(key: key);
   Color myColor = const Color.fromRGBO(88, 17, 142, 0.8);
   final TextEditingController eController = TextEditingController();
   final TextEditingController cController = TextEditingController();
   final TextEditingController pController = TextEditingController();
-
+    final String? examType;
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<CreateNewExamCubit, CreateNewExamStates>(
@@ -86,6 +87,7 @@ class CreateNewExam extends StatelessWidget {
                                   context,
                                   MaterialPageRoute(
                                       builder: (_) => CreateExam2(
+                                        examType: examType.toString(),
                                         examName: eController.text,
                                         administratorCode:
                                         cController.text,

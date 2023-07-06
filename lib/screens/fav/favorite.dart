@@ -1,10 +1,8 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:quiz_app_new/models/fav_model.dart';
-import 'package:quiz_app_new/screens/fav/cubit/cubit.dart';
-import 'package:quiz_app_new/screens/fav/cubit/states.dart';
+ import 'package:quiz_app_new/models/fav_model.dart';
+
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 import '../../Sh/shared_pref.dart';

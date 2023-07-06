@@ -6,8 +6,10 @@ import 'package:quiz_app_new/core/nav.dart';
 import 'package:quiz_app_new/core/toast/toast.dart';
 import 'package:quiz_app_new/screens/student_home/cubit/cubit.dart';
 import 'package:quiz_app_new/screens/student_quiz/cubit/states.dart';
- import '../../conctant.dart';
- import '../../models/exam_model.dart';
+ import '../../Sh/shared_pref.dart';
+import '../../conctant.dart';
+ import '../../core/toast/toast_states.dart';
+import '../../models/exam_model.dart';
 import 'score.dart';
 import 'cubit/cubit.dart';
 
@@ -18,7 +20,7 @@ class QuizPage extends StatefulWidget {
 
 class _QuizPageState extends State<QuizPage> {
 
-  int _seconds = 6000000;
+  int _seconds = 6000;
   int? _endTime;
 
   void _startTimer() {
@@ -26,7 +28,7 @@ class _QuizPageState extends State<QuizPage> {
     setState(() {});
   }
   int questionNumber = 1;
-  int _currentQuestionIndex = 0;
+  // int _currentQuestionIndex = 0;
   // List<String> questions = [
   //   'Which feature of OOP indicates code reusability?',
   //   'What is the correct way to declare a variable in Dart?',
@@ -58,66 +60,80 @@ class _QuizPageState extends State<QuizPage> {
   final List<Question> studentAnswers = [ ];
   @override
   Widget build(BuildContext context) {
+    SharedPreferencesHelper.getData(key: "score");
+    print(SharedPreferencesHelper.getData(key: "score"));
+    print("4444444");
     return BlocProvider(
       create: (context)=>StudentQuizCubit()..getAllQuiz(),
       child: BlocConsumer<StudentQuizCubit, StudentQuizStates>(
   listener: (context, state) {},
   builder: (context, state) {
+    SharedPreferencesHelper.getData(key: "score");
     var cubit = StudentQuizCubit.get(context);
-    return Scaffold(
-        backgroundColor: kBackgroundColor,
-        appBar: AppBar(
-          backgroundColor: myColor,
-          actions: [
-            Padding(
-              padding: const EdgeInsets.only(top: 20,right: 20),
-              child: CountdownTimer(
-                endTime: _endTime,
-                onEnd: () {
-                  // عند انتهاء المؤقت، اذهب إلى الشاشة التالية
-                  AppNav.customNavigator(
-                    context: context,
-                    screen: ScorePage(
-                      score: cubit.score,
-                      correctAnswers: cubit.score,
-                      totalQuestions: cubit.allQuiz[0]["questions"].length,
-                    ),
-                    finish: true,
-                  );
-                },
-              ),
-            ),
-          ],
+    return
+      SharedPreferencesHelper.getData(key: "score")==null ?
+      WillPopScope(
+      onWillPop: () async {
+        ToastConfig.showToast(msg: "You can no back until finish the exam !!", toastStates: ToastStates.Error);
+        return false;
+      },
+      child: ConditionalBuilder(
+        condition: state is ! GetAllQuizLoadingState,
+        fallback: (context)=>Center(
+          child: CircularProgressIndicator(
+            color: myColor,
+          ),
         ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(height: 40),
-                    Text(
-                      'Start Your Quiz',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                        color: kPrimartColor,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    SizedBox(height: 40),
-                    ConditionalBuilder(
-                      condition: state is ! GetAllQuizLoadingState,
-                      fallback: (context)=>Center(
-                        child: CircularProgressIndicator(
-                          color: myColor,
+        builder: (context){
+          return
+
+            Scaffold(
+            backgroundColor: kBackgroundColor,
+            appBar: AppBar(
+              backgroundColor: myColor,
+              title: Text("${cubit.allQuiz[0]["examType"]}"),
+              actions: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 20,right: 20),
+                  child: CountdownTimer(
+                    endTime: _endTime,
+                    onEnd: () {
+                      // عند انتهاء المؤقت، اذهب إلى الشاشة التالية
+                      AppNav.customNavigator(
+                        context: context,
+                        screen: ScorePage(
+                          score: cubit.score,
+                          correctAnswers: cubit.score,
+                          totalQuestions: cubit.allQuiz[0]["questions"].length,
                         ),
-                      ),
-                      builder: (context){
-                        return ListView.builder(
+                        finish: true,
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+            body: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(height: 40),
+                        Text(
+                          'Start Your Quiz',
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold,
+                            color: kPrimartColor,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(height: 40),
+                        ListView.builder(
                           physics: NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
                           itemBuilder: (BuildContext context, int index) {
@@ -239,93 +255,128 @@ class _QuizPageState extends State<QuizPage> {
                             );
                           },
                           itemCount:cubit.allQuiz[0]["questions"].length,
-                        );
-                      },
-                    ),
-                    SizedBox(height: 20),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 16.0),
-                      child: Center(
-                        child: ElevatedButton(
-                          onPressed: () {
-                            print(selectedOption);
-                            print(cubit.allQuiz[0]["questions"]);
-                            print(cubit.score);
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: Text('be careful'),
-                                    content: Text('Please answer all the questions.'),
-                                    actions: <Widget>[
-                                      TextButton(
-                                        onPressed: () {
-                                          print(cubit.score);
-                                          print(StudentHomeCubit.get(context).studentProfileModel!.name);
-                                          cubit.storeStudentScore(
-                                            studentAnswers: selectedOption,
-                                            questions: cubit.allQuiz[0]["questions"],
-                                            studentName:  StudentHomeCubit.get(context).studentProfileModel!.name!=null ?
-                                            "${StudentHomeCubit.get(context).studentProfileModel!.name}" :
-                                            'Shimaa Ahmed',
-                                            studentCode: StudentHomeCubit.get(context).studentProfileModel!.grade!=null ?
-                                            "${StudentHomeCubit.get(context).studentProfileModel!.grade}" :
-                                            '150177',
-                                            studentImage: StudentHomeCubit.get(context).studentProfileModel!.image!=null ?
-                                            "${StudentHomeCubit.get(context).studentProfileModel!.image}" :
-                                            '',
-                                            examName: cubit.allQuiz[0]["examName"],
-                                            examPassword: cubit.allQuiz[0]["examPassword"],
-                                            administratorCode: cubit.allQuiz[0]["administratorCode"],
-                                            correctAnswers: cubit.score,
-                                           totalQuestions: cubit.allQuiz[0]["questions"].length,
-                                          );
-                                          AppNav.customNavigator(
+                        ),
+                        SizedBox(height: 20),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 16.0),
+                          child: Center(
+                            child: ElevatedButton(
+                              onPressed: () {
+                                print(selectedOption);
+                                print(cubit.allQuiz[0]["questions"]);
+                                print(cubit.score);
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text('be careful'),
+                                      content: Text('Please answer all the questions.'),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () {
+                                            print(cubit.score);
+                                            print(StudentHomeCubit.get(context).studentProfileModel!.name);
+                                            cubit.storeStudentScore(
+                                              studentAnswers: selectedOption,
+                                              questions: cubit.allQuiz[0]["questions"],
+                                              studentName:  StudentHomeCubit.get(context).studentProfileModel!.name!=null ?
+                                              "${StudentHomeCubit.get(context).studentProfileModel!.name}" :
+                                              'Shimaa Ahmed',
+                                              studentCode: StudentHomeCubit.get(context).studentProfileModel!.grade!=null ?
+                                              "${StudentHomeCubit.get(context).studentProfileModel!.grade}" :
+                                              '150177',
+                                              studentImage: StudentHomeCubit.get(context).studentProfileModel!.image!=null ?
+                                              "${StudentHomeCubit.get(context).studentProfileModel!.image}" :
+                                              '',
+                                              examName: cubit.allQuiz[0]["examName"],
+                                              examPassword: cubit.allQuiz[0]["examPassword"],
+                                              administratorCode: cubit.allQuiz[0]["administratorCode"],
+                                              correctAnswers: cubit.score,
+                                              totalQuestions: cubit.allQuiz[0]["questions"].length,
+                                            );
+                                            AppNav.customNavigator(
                                               context: context,
                                               screen: ScorePage(
-                                                  score: cubit.score,
-                                                  correctAnswers: cubit.score,
-                                                  totalQuestions: cubit.allQuiz[0]["questions"].length,
+                                                score: cubit.score,
+                                                correctAnswers: cubit.score,
+                                                totalQuestions: cubit.allQuiz[0]["questions"].length,
                                               ),
                                               finish: true,
-                                          );
-                                        },
-                                        child: Text('OK',style: TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                  color: kTextColor,
+                                            );
+                                          },
+                                          child: Text('OK',style: TextStyle(
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.bold,
+                                            color: kTextColor,
 
-                                  ),
+                                          ),
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
+                                      ],
+                                    );
+                                  },
+                                );
 
-                          },
-                          child: Text(
-                            'Submit',
-                            style: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: kTextColor,
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 80, vertical: 10),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30),
+                              },
+                              child: Text(
+                                'Submit',
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: kTextColor,
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 80, vertical: 10),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                      ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
+              ],
+            ),
+          ) ;
+
+        },
+      ),
+    ) :
+      Scaffold(
+        backgroundColor: kBackgroundColor,
+        appBar: AppBar(
+          backgroundColor: myColor,
+        ),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Center(
+                    child: Text(
+                      'You can not be tested again',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                        color: kPrimartColor,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+
+
+                ],
               ),
             ),
           ],

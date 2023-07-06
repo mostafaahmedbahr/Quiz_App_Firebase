@@ -39,6 +39,7 @@ class LoginCubit extends Cubit<LoginStates> {
        print(value.user!.uid);
        print("0"*20);
        SharedPreferencesHelper.saveData(key: "uId", value: value.user!.uid);
+       SharedPreferencesHelper.saveData(key: "isAdmin", value: false);
        print(value.user!.email);
        emit(LoginSuccessState());
      }).catchError((error)
@@ -64,6 +65,8 @@ class LoginCubit extends Cubit<LoginStates> {
       }
       debugPrint(allUsers.length.toString());
       print(allUsers[0]["isAdmin"]);
+      SharedPreferencesHelper.saveData(key: "uId", value: allUsers[0]["id"]);
+      SharedPreferencesHelper.saveData(key: "isAdmin", value: false);
       debugPrint("6"*20);
       emit(GetUserDataSuccessState());
     }).catchError((error)

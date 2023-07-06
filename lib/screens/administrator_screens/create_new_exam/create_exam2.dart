@@ -1,5 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
  import 'package:quiz_app_new/core/nav.dart';
@@ -12,10 +11,12 @@ import 'package:quiz_app_new/screens/administrator_screens/create_new_exam/cubit
 
 
 class CreateExam2 extends StatefulWidget {
-  const CreateExam2({Key? key, required this.examName, required this.administratorCode, required this.examPassword}) : super(key: key);
+  const CreateExam2({Key? key, required this.examName, required this.administratorCode, required this.examPassword,
+  required this.examType}) : super(key: key);
   final String examName;
   final String administratorCode;
   final String examPassword;
+  final String examType;
   @override
   State<CreateExam2> createState() => _CreateExam2State();
 }
@@ -38,6 +39,7 @@ class _CreateExam2State extends State<CreateExam2> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.examType.toString());
     return BlocConsumer<CreateNewExamCubit,CreateNewExamStates>(
       listener: (context,state){
         if(state is AddNewExamSuccessState){
@@ -46,7 +48,6 @@ class _CreateExam2State extends State<CreateExam2> {
               screen: SuccesExam(),
               finish: true,
           );
-
         }
       },
       builder:  (context,state){
@@ -97,7 +98,7 @@ class _CreateExam2State extends State<CreateExam2> {
                         builder: (context){
                           return buildElevatedButton('Finish', () async {
                           cubit.addExamToFirebase(
-
+                            examType: widget.examType.toString(),
                               examName: widget.examName,
                               administratorCode: widget.administratorCode,
                               examPassword: widget.examPassword,
@@ -138,7 +139,7 @@ class _CreateExam2State extends State<CreateExam2> {
 
   Widget buildText(String str, double fontSize,
       {TextAlign alignment = TextAlign.center}) {
-    final color = const Color(0xFF6309A7);
+    // final color = const Color(0xFF6309A7);
     final style = TextStyle(
       color: Colors.white,
       fontSize: fontSize,

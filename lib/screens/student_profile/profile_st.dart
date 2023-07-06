@@ -159,33 +159,33 @@ class StudentProfile extends StatelessWidget {
                           ]),
                       child: Column(
                         children: <Widget>[
-                          ListTile(
-                            leading: CircleAvatar(
-                              backgroundColor: Colors.purple[50],
-                              child: IconButton(
-                                onPressed: () {},
-                                icon: Icon(
-                                  Icons.account_circle,
-                                  color: Colors.purple[100],
-                                ),
-                              ),
-                            ),
-                            title: const Text(
-                              'My Account',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 18,
-                              ),
-                            ),
-                            subtitle: const Text(
-                              'Make change to your account ',
-                              style: TextStyle(
-                                fontSize: 15,
-                              ),
-                            ),
-                            trailing: const Icon(Icons.arrow_right),
-                            onTap: () {},
-                          ),
+                          // ListTile(
+                          //   leading: CircleAvatar(
+                          //     backgroundColor: Colors.purple[50],
+                          //     child: IconButton(
+                          //       onPressed: () {},
+                          //       icon: Icon(
+                          //         Icons.account_circle,
+                          //         color: Colors.purple[100],
+                          //       ),
+                          //     ),
+                          //   ),
+                          //   title: const Text(
+                          //     'My Account',
+                          //     style: TextStyle(
+                          //       color: Colors.black,
+                          //       fontSize: 18,
+                          //     ),
+                          //   ),
+                          //   subtitle: const Text(
+                          //     'Make change to your account ',
+                          //     style: TextStyle(
+                          //       fontSize: 15,
+                          //     ),
+                          //   ),
+                          //   trailing: const Icon(Icons.arrow_right),
+                          //   onTap: () {},
+                          // ),
                           ListTile(
                             leading: CircleAvatar(
                               backgroundColor: Colors.purple[50],

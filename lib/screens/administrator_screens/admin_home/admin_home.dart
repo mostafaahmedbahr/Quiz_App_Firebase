@@ -7,6 +7,7 @@ import 'package:quiz_app_new/screens/administrator_screens/admin_home/cubit/cubi
 import 'package:quiz_app_new/screens/administrator_screens/admin_home/cubit/states.dart';
 
 import '../../../conctant.dart';
+import '../create_new_exam/choose_exam_type.dart';
 import '../create_new_exam/create new exam.dart';
 import '../students_score/showExamResult.dart';
 import '../../start/start.dart';
@@ -138,7 +139,7 @@ class _AdminHomeState extends State<AdminHome> {
                     InkWell(
                       onTap: () {
                         Navigator.push(context,
-                            MaterialPageRoute(builder: (_) => CreateNewExam()));
+                            MaterialPageRoute(builder: (_) => ChooseExamTypeScreen()));
                       },
                       child: buildContainer('Create Exam',
                           'https://www.iitms.co.in/college-erp/img/online-exam-icon.png'),

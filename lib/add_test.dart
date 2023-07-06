@@ -1,8 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:quiz_app_new/models/exam_model.dart';
-import 'package:quiz_app_new/models/exam_model.dart';
-import 'package:quiz_app_new/models/question_model.dart';
+
 
 class AddExamScreen extends StatefulWidget {
   @override

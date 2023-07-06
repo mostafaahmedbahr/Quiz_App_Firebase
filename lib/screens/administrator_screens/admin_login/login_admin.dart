@@ -8,8 +8,7 @@ import 'package:quiz_app_new/screens/administrator_screens/admin_login/login_cub
 import '../../../conctant.dart';
 import '../../../core/toast/toast_states.dart';
 import '../admin_home/admin_home.dart';
-import '../admin_home/cubit/states.dart';
-import 'login_cubit/states.dart';
+ import 'login_cubit/states.dart';
 
 // ignore: must_be_immutable
 class LoginAd extends StatefulWidget {

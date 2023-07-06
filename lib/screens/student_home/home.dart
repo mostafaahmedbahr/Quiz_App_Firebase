@@ -13,6 +13,7 @@ import '../fav/cubit/cubit.dart';
 import '../layout/nav_bar.dart';
 import '../../conctant.dart';
  import '../student_quiz/examas.dart';
+import '../student_quiz/quiz_page.dart';
 import '../students_lectuers/lecture_screen.dart';
 import '../test_bank/test_bank.dart';
 import 'cubit/cubit.dart';
@@ -48,10 +49,10 @@ class _HomeState extends State<Home> {
     // ignore: unused_local_variable
     Size size = MediaQuery.of(context).size;
     return BlocConsumer<StudentHomeCubit,StudentHomeStates>(
-      listener:(context,state){} ,
+      listener:(context,state){},
       builder: (context,state){
+        print(SharedPreferencesHelper.getData(key: "score"));
         var cubit = StudentHomeCubit.get(context);
-
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 20,horizontal: 20),
           child: Column(
@@ -222,7 +223,7 @@ class _HomeState extends State<Home> {
                       child: InkWell(
                         onTap: () {
                           Navigator.of(context).push(
-                              MaterialPageRoute(builder: (BuildContext context) => const Examas()));
+                              MaterialPageRoute(builder: (BuildContext context) =>   QuizPage()));
                         },
                         child: Container(
                           padding: const EdgeInsets.all(kDefaultPadding / 2),
@@ -358,6 +359,7 @@ class _HomeState extends State<Home> {
                                 ),
                                 child: YoutubePlayer(
                                   controller: controller!,
+
                                   showVideoProgressIndicator: true,
                                   bottomActions: [
                                     CurrentPosition(),

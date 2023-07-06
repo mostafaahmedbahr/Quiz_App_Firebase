@@ -23,6 +23,9 @@ class StudentHomeCubit extends Cubit<StudentHomeStates> {
     {
       print(value.data());
       studentProfileModel = StudentProfileModel.fromJson(value.data());
+      print(studentProfileModel!.isAdmin);
+      print("bahr"*10);
+      SharedPreferencesHelper.saveData(key: "isAdmin", value: studentProfileModel!.isAdmin);
       emit(GetStudentProfileDataSuccessState());
     }).catchError((error)
     {

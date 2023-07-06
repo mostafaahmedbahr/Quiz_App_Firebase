@@ -25,7 +25,7 @@ class CreateNewExamCubit extends Cubit<CreateNewExamStates> {
 //   {
 //     emit(AddNewExamLoadingState());
 //     FirebaseFirestore.instance.collection("AllUsers")
-//         .doc("${SharedPreferencesHelper.getData(key: "AdminUId")}")
+//         .doc("${SharedPreferencesHelper.getData(key: "uId")}")
 //         .collection("exams").doc("").set(
 //         {
 //           "examName" : examName,
@@ -47,8 +47,8 @@ class CreateNewExamCubit extends Cubit<CreateNewExamStates> {
 
 
   addExamToFirebase({
-
     required String examName,
+    required String examType,
     required String administratorCode,
     required String examPassword,
     required dynamic questions,
@@ -59,6 +59,7 @@ class CreateNewExamCubit extends Cubit<CreateNewExamStates> {
     final CollectionReference examsRef = FirebaseFirestore.instance.collection('exams');
     final examData = {
       'examName': examName,
+      'examType': examType,
       'administratorCode': administratorCode,
       'examPassword': examPassword,
       'questions': questions.map((q) => {
@@ -70,7 +71,7 @@ class CreateNewExamCubit extends Cubit<CreateNewExamStates> {
     };
     try {
       // Add the exam data to Firestore
-      await examsRef.doc(SharedPreferencesHelper.getData(key: "AdminUId")).set(examData);
+      await examsRef.doc(SharedPreferencesHelper.getData(key: "uId")).set(examData);
       // Navigate to the success screen
       emit(AddNewExamSuccessState());
 

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:quiz_app_new/Sh/shared_pref.dart';
 import 'package:quiz_app_new/core/nav.dart';
 import 'package:quiz_app_new/core/toast/toast.dart';
 import 'package:quiz_app_new/screens/layout/nav_bar.dart';
-import 'package:quiz_app_new/screens/student_quiz/examas.dart';
-import '../../conctant.dart';
+ import '../../conctant.dart';
 
 class ScorePage extends StatelessWidget {
   final int score;
@@ -18,6 +18,10 @@ class ScorePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SharedPreferencesHelper.saveData(key: "score", value: correctAnswers);
+    SharedPreferencesHelper.getData(key: "score");
+    print(SharedPreferencesHelper.getData(key: "score"));
+    print("0123456789");
     return Scaffold(
       backgroundColor: kBackgroundColor,
       appBar: AppBar(
@@ -68,6 +72,9 @@ class ScorePage extends StatelessWidget {
                   SizedBox(height: 32),
                   ElevatedButton(
                     onPressed: () {
+                      SharedPreferencesHelper.saveData(key: "score", value: correctAnswers);
+                      SharedPreferencesHelper.getData(key: "score");
+                      print(SharedPreferencesHelper.getData(key: "score"));
                     AppNav.customNavigator(
                         context: context,
                         screen: Layout(),
@@ -85,7 +92,7 @@ class ScorePage extends StatelessWidget {
                       ),
                     ),
                     style: ElevatedButton.styleFrom(
-                      primary: kTextColor ,
+                      backgroundColor: kTextColor ,
                       padding: EdgeInsets.symmetric(
                           horizontal: 120, vertical: 20),
                       shape: RoundedRectangleBorder(

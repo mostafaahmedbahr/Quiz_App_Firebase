@@ -34,6 +34,7 @@ class StudentProfileCubit extends Cubit<StudentProfileStates> {
   logout()async
   {
     SharedPreferencesHelper.removeData(key: "uId");
+    SharedPreferencesHelper.removeData(key: "isAdmin");
     await FirebaseAuth.instance.signOut();
     print("----------");
     emit(LogoutSuccessState());

@@ -21,7 +21,7 @@ class AdminHomeCubit extends Cubit<AdminHomeStates> {
   getUserDataInHome() {
     emit(GetAdminProfileDataLoadingState());
     FirebaseFirestore.instance.collection("AllUsers").doc(
-        SharedPreferencesHelper.getData(key: "AdminUId")).get().then((value) {
+        SharedPreferencesHelper.getData(key: "uId")).get().then((value) {
       print(value.data());
       adminProfileModel = AdminProfileModel.fromJson(value.data());
       emit(GetAdminProfileDataSuccessState());
@@ -33,7 +33,8 @@ class AdminHomeCubit extends Cubit<AdminHomeStates> {
 
   adminLogout()async
   {
-    SharedPreferencesHelper.removeData(key: "AdminUId");
+    SharedPreferencesHelper.removeData(key: "uId");
+    SharedPreferencesHelper.removeData(key: "isAdmin");
     await FirebaseAuth.instance.signOut();
     print("----------");
     emit(LogoutSuccessState());

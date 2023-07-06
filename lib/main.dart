@@ -1,14 +1,15 @@
-import 'package:bloc/bloc.dart';
-import 'package:firebase_app_check/firebase_app_check.dart';
+ import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quiz_app_new/screens/administrator_screens/admin_home/admin_home.dart';
 import 'package:quiz_app_new/screens/administrator_screens/admin_home/cubit/cubit.dart';
 import 'package:quiz_app_new/screens/administrator_screens/admin_login/login_cubit/cubit.dart';
 import 'package:quiz_app_new/screens/administrator_screens/create_new_exam/cubit/cubit.dart';
 import 'package:quiz_app_new/screens/fav/cubit/cubit.dart';
 import 'package:quiz_app_new/screens/layout/cubit/cubit.dart';
+import 'package:quiz_app_new/screens/layout/nav_bar.dart';
 import 'package:quiz_app_new/screens/login/login_cubit/cubit.dart';
 import 'package:quiz_app_new/screens/student_home/cubit/cubit.dart';
 import 'package:quiz_app_new/screens/student_profile/cubit/cubit.dart';
@@ -17,7 +18,6 @@ import 'package:responsive_framework/utils/scroll_behavior.dart';
 import 'Sh/bloc_observer.dart';
 import 'Sh/shared_pref.dart';
 import 'screens/splash/splash_screen.dart';
-import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
@@ -86,7 +86,11 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ),
-        home: const SplashScreen(),
+        home:
+        // const SplashScreen(),
+        SharedPreferencesHelper.getData(key: "uId")==null ?  const SplashScreen() :
+        SharedPreferencesHelper.getData(key: "uId")!=null && SharedPreferencesHelper.getData(key: "isAdmin") ==true ? AdminHome():
+        Layout(),
         builder: (context, child) => ResponsiveWrapper.builder(
           BouncingScrollWrapper.builder(context, child!),
           maxWidth: 1200,

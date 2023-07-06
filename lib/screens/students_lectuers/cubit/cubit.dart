@@ -21,7 +21,8 @@ class StudentLectureCubit extends Cubit<StudentLectureStates> {
   getAllLectures()
   async {
     emit(GetAllStudentLectureLoadingState());
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection("lectures_pdf").get();
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection("lectures_pdf")
+        .get();
     FirebaseFirestore.instance.collection("lectures_pdf").get().then((value)
     {
       allLectures = querySnapshot.docs.map((doc) => doc.data()).toList();

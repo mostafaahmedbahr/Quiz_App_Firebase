@@ -21,7 +21,7 @@ class _ExamasState extends State<Examas> {
       child: BlocConsumer<StudentQuizCubit, StudentQuizStates>(
   listener: (context, state) {},
   builder: (context, state) {
-    var cubit = StudentQuizCubit.get(context);
+    // var cubit = StudentQuizCubit.get(context);
     return Scaffold(
         appBar: AppBar(
           backgroundColor: myColor,

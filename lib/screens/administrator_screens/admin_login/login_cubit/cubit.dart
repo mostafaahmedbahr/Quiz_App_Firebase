@@ -40,7 +40,8 @@ class AdminLoginCubit extends Cubit<AdminLoginStates> {
      ).then((value){
        print(value.user!.uid);
        print("0"*20);
-       SharedPreferencesHelper.saveData(key: "AdminUId", value: value.user!.uid);
+       SharedPreferencesHelper.saveData(key: "uId", value: value.user!.uid);
+       SharedPreferencesHelper.saveData(key: "isAdmin", value: true);
        print(value.user!.email);
        getUserDataInHome();
        emit(LoginSuccessState());
@@ -59,13 +60,15 @@ class AdminLoginCubit extends Cubit<AdminLoginStates> {
     // emit(GetUserDataLoadingState());
     allUsers = [];
     FirebaseFirestore.instance.collection("AllUsers")
-        .where("id" , isEqualTo: SharedPreferencesHelper.getData(key: "AdminUId"))
+        .where("id" , isEqualTo: SharedPreferencesHelper.getData(key: "uId"))
         .get().then((value)
     {
       for (var element in value.docs) {
         allUsers.add(element );
       }
       debugPrint(allUsers.length.toString());
+      print(allUsers[0]["isAdmin"]);
+      SharedPreferencesHelper.saveData(key: "isAdmin", value: true);
       debugPrint("6"*20);
       // emit(GetUserDataSuccessState());
     }).catchError((error)
