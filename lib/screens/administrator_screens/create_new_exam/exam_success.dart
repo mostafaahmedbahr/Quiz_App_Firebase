@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../Sh/shared_pref.dart';
 import '../admin_home/admin_home.dart';
  import 'package:cached_network_image/cached_network_image.dart';
 
@@ -19,6 +20,7 @@ class _SuccesExamState extends State<SuccesExam> {
 
   @override
   Widget build(BuildContext context) {
+    print( SharedPreferencesHelper.getData(key: "score"));
     return Scaffold(
         body: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,

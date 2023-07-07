@@ -1,6 +1,7 @@
  import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quiz_app_new/Sh/shared_pref.dart';
  import 'package:quiz_app_new/core/nav.dart';
 import 'package:quiz_app_new/core/toast/toast.dart';
 import 'package:quiz_app_new/screens/administrator_screens/create_new_exam/cubit/cubit.dart';
@@ -39,10 +40,12 @@ class _CreateExam2State extends State<CreateExam2> {
 
   @override
   Widget build(BuildContext context) {
+    SharedPreferencesHelper.getData(key: "score");
     print(widget.examType.toString());
     return BlocConsumer<CreateNewExamCubit,CreateNewExamStates>(
       listener: (context,state){
         if(state is AddNewExamSuccessState){
+          SharedPreferencesHelper.removeData(key: "score");
           AppNav.customNavigator(
               context: context,
               screen: SuccesExam(),

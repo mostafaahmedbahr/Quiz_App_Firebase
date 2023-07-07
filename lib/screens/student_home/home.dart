@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quiz_app_new/core/toast/toast.dart';
 import 'package:quiz_app_new/screens/layout/cubit/cubit.dart';
 import 'package:quiz_app_new/screens/student_home/cubit/states.dart';
+import 'package:quiz_app_new/widgets/custom_button.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
  import '../../Sh/shared_pref.dart';
 import '../../core/toast/toast_states.dart';
@@ -44,6 +45,14 @@ class _HomeState extends State<Home> {
       ),
     );
   }
+
+
+  final List<String> videoUrls = [
+    // Add your YouTube video URLs here
+    "https://www.youtube.com/watch?v=video1",
+    "https://www.youtube.com/watch?v=video2",
+    "https://www.youtube.com/watch?v=video3",
+  ];
   @override
   Widget build(BuildContext context) {
     // ignore: unused_local_variable
@@ -318,163 +327,234 @@ class _HomeState extends State<Home> {
                 title: 'Recomended Courses',
               ),
               const SizedBox(height: 15),
-              StreamBuilder<QuerySnapshot<FavouriteModel>>(
-                  stream: FirebaseFirestore.instance
-                      .collection("AllUsers")
-                      .doc(SharedPreferencesHelper.getData(key: "uId"))
-                      .collection("favourite")
-                      .withConverter<FavouriteModel>(
-                    fromFirestore: (snapshot, options) {
-                      print(snapshot.data());
-                      return FavouriteModel.fromFirestore(snapshot.data()!);
-                    },
-                    toFirestore: (task, options) {
-                      return task.toFirestore();
-                    },
-                  ).snapshots(),
-                  builder: (buildContext, snapshot) {
-                    return  cubit.allVideos.length==0 ?
-                    Center(
-                      child: CircularProgressIndicator(
-                        color: myColor,
-                      ),
-                    )    :
-                    SizedBox(
-                      height: 200,
-                      child: ListView.separated(
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (context,index)
-                        {
-                          g(url: "${cubit.allVideos[index]["url"]}");
-                          return Stack(
-                            alignment: Alignment.topRight,
-                            children: [
-                              Container(
-                                width: MediaQuery.sizeOf(context).width*0.7,
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: myColor,
-                                    width: 5,
-                                  ),
-                                ),
-                                child: YoutubePlayer(
-                                  controller: controller!,
-
-                                  showVideoProgressIndicator: true,
-                                  bottomActions: [
-                                    CurrentPosition(),
-                                    ProgressBar(
-                                      isExpanded: true,
-                                      colors: ProgressBarColors(
-                                        handleColor: Colors.white,
-                                        playedColor: myColor,
-                                      ),
-                                    ),
-                                    RemainingDuration(),
-                                    PlaybackSpeedButton(),
-                                  ],
-                                ),
-                              ),
-                              IconButton(
-                                onPressed: (){
-                                  if(FavCubit.get(context).favList.any((element) =>element.id == cubit.allVideos[index]["id"])){
-                                    ToastConfig.showToast(
-                                      msg: "this product already in fav ..",
-                                      toastStates: ToastStates.Success,
-                                    );
-                                    // cubit.add(DeleteProductFromFavorite(id:  widget.model.productId,));
-                                  }else{
-                                    FavCubit.get(context).addToFav(
-                                        favouriteModel: FavouriteModel(
-                                          videoUrl: cubit.allVideos[index]["url"],
-                                          title: cubit.allVideos[index]["title"],
-                                          userId: SharedPreferencesHelper.getData(key: "uId"),
-                                          id:cubit.allVideos[index]["id"],
-                                        )
-                                    );
-                                    ToastConfig.showToast(
-                                      msg: "this product is added to fav ..",
-                                      toastStates: ToastStates.Success,
-                                    );
-
-                                  }
-
-                                },
-                                icon:
-                                FavCubit.get(context).favList.any((element) =>element.id == cubit.allVideos[index]["id"]) ?
-                                Icon(Icons.favorite,
-                                  size: 30,
-                                  color:
-                                  Colors.red,
-                                ):
-                                Icon(Icons.favorite_border,
-                                  size: 30,
-                                  color:
-                                  Colors.red,
-                                ),
-                              ),
-                            ],
-                          );
-                        },
-                        separatorBuilder: (context,index){
-                          return SizedBox(width: 30,);
-                        },
-                        itemCount: cubit.allVideos.length,
-                      ),
-                    );
-                  }
-
-              ),
-
-              // ConditionalBuilder(
-              //   condition: state is  GetAllVidoesSuccessState,
-              //   fallback: (context)=>Center(
-              //     child: CircularProgressIndicator(
-              //       color: myColor,
-              //     ),
-              //   ),
-              //   builder: (context){
-              //     return SizedBox(
-              //       height: 200,
-              //       child: ListView.separated(
-              //         scrollDirection: Axis.horizontal,
-              //         itemBuilder: (context,index)
-              //         {
-              //           g(url: "${cubit.allVideos[index]["url"]}");
-              //           return   Container(
-              //             decoration: BoxDecoration(
-              //               border: Border.all(
-              //                 color: myColor,
-              //                 width: 5,
-              //               ),
-              //             ),
-              //             child: YoutubePlayer(
-              //               controller: controller!,
-              //               showVideoProgressIndicator: true,
-              //               bottomActions: [
-              //                 CurrentPosition(),
-              //                 ProgressBar(
-              //                   isExpanded: true,
-              //                   colors: ProgressBarColors(
-              //                     handleColor: Colors.white,
-              //                     playedColor: myColor,
+              // StreamBuilder<QuerySnapshot<FavouriteModel>>(
+              //     stream: FirebaseFirestore.instance
+              //         .collection("AllUsers")
+              //         .doc(SharedPreferencesHelper.getData(key: "uId"))
+              //         .collection("favourite")
+              //         .withConverter<FavouriteModel>(
+              //       fromFirestore: (snapshot, options) {
+              //         print(snapshot.data());
+              //         return FavouriteModel.fromFirestore(snapshot.data()!);
+              //       },
+              //       toFirestore: (task, options) {
+              //         return task.toFirestore();
+              //       },
+              //     ).snapshots(),
+              //     builder: (buildContext, snapshot) {
+              //       return  cubit.allVideos.length==0 ?
+              //       Center(
+              //         child: CircularProgressIndicator(
+              //           color: myColor,
+              //         ),
+              //       )    :
+              //       Expanded(
+              //         child: ListView.separated(
+              //           scrollDirection: Axis.vertical,
+              //           itemBuilder: (context,index)
+              //           {
+              //             g(url: "${cubit.allVideos[index]["url"]}");
+              //             return Stack(
+              //               alignment: Alignment.topRight,
+              //               children: [
+              //                 Container(
+              //                   width: MediaQuery.sizeOf(context).width,
+              //                   decoration: BoxDecoration(
+              //                     border: Border.all(
+              //                       color: myColor,
+              //                       width: 5,
+              //                     ),
+              //                   ),
+              //                   child: YoutubePlayer(
+              //                     controller: controller!,
+              //                     showVideoProgressIndicator: true,
+              //                     bottomActions: [
+              //                       CurrentPosition(),
+              //                       ProgressBar(
+              //                         isExpanded: true,
+              //                         colors: ProgressBarColors(
+              //                           handleColor: Colors.white,
+              //                           playedColor: myColor,
+              //                         ),
+              //                       ),
+              //                       RemainingDuration(),
+              //                       PlaybackSpeedButton(),
+              //                     ],
               //                   ),
               //                 ),
-              //                 RemainingDuration(),
-              //                 PlaybackSpeedButton(),
-              //               ],
-              //             ),
-              //           );
-              //         },
-              //         separatorBuilder: (context,index){
-              //           return SizedBox(width: 20,);
-              //         },
-              //         itemCount: 10,
-              //       ),
-              //     );
-              //   },
+              //                 IconButton(
+              //                   onPressed: (){
+              //                     if(FavCubit.get(context).favList.any((element) =>element.id == cubit.allVideos[index]["id"])){
+              //                       ToastConfig.showToast(
+              //                         msg: "this product already in fav ..",
+              //                         toastStates: ToastStates.Success,
+              //                       );
+              //                       // cubit.add(DeleteProductFromFavorite(id:  widget.model.productId,));
+              //                     }else{
+              //                       FavCubit.get(context).addToFav(
+              //                           favouriteModel: FavouriteModel(
+              //                             videoUrl: cubit.allVideos[index]["url"],
+              //                             title: cubit.allVideos[index]["title"],
+              //                             userId: SharedPreferencesHelper.getData(key: "uId"),
+              //                             id:cubit.allVideos[index]["id"],
+              //                           )
+              //                       );
+              //                       ToastConfig.showToast(
+              //                         msg: "this product is added to fav ..",
+              //                         toastStates: ToastStates.Success,
+              //                       );
               //
-              // )
+              //                     }
+              //
+              //                   },
+              //                   icon:
+              //                   FavCubit.get(context).favList.any((element) =>element.id == cubit.allVideos[index]["id"]) ?
+              //                   Icon(Icons.favorite,
+              //                     size: 30,
+              //                     color:
+              //                     Colors.red,
+              //                   ):
+              //                   Icon(Icons.favorite_border,
+              //                     size: 30,
+              //                     color:
+              //                     Colors.red,
+              //                   ),
+              //                 ),
+              //               ],
+              //             );
+              //           },
+              //           separatorBuilder: (context,index){
+              //             return SizedBox(width: 30,);
+              //           },
+              //           itemCount: cubit.allVideos.length,
+              //         ),
+              //       );
+              //     }
+              //
+              // ),
+
+              ConditionalBuilder(
+                condition: state is  GetAllVidoesSuccessState,
+                fallback: (context)=>Center(
+                  child: CircularProgressIndicator(
+                    color: myColor,
+                  ),
+                ),
+                builder: (context){
+                  return Expanded(
+                    child: ListView.separated(
+                      scrollDirection: Axis.vertical,
+                      itemBuilder: (context,index)
+                      {
+                        g(url: "${cubit.allVideos[index]["url"]}");
+                        return   Column(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: myColor,
+                                  width: 5,
+                                ),
+                              ),
+                              child: YoutubePlayer(
+                                controller: controller!,
+                                showVideoProgressIndicator: true,
+                                bottomActions: [
+                                  CurrentPosition(),
+                                  ProgressBar(
+                                    isExpanded: true,
+                                    colors: ProgressBarColors(
+                                      handleColor: Colors.white,
+                                      playedColor: myColor,
+                                    ),
+                                  ),
+                                  RemainingDuration(),
+                                  PlaybackSpeedButton(),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 20,),
+                            StreamBuilder<QuerySnapshot<FavouriteModel>>(
+                              stream: FirebaseFirestore.instance
+                                  .collection("AllUsers")
+                                  .doc(SharedPreferencesHelper.getData(key: "uId"))
+                                  .collection("favourite")
+                                  .withConverter<FavouriteModel>(
+                                fromFirestore: (snapshot, options) {
+                                  print(snapshot.data());
+                                  return FavouriteModel.fromFirestore(snapshot.data()!);
+                                },
+                                toFirestore: (task, options) {
+                                  return task.toFirestore();
+                                },
+                              ).snapshots(),
+                                builder: (buildContext, snapshot) {
+                                  return  cubit.allVideos.length==0 ?
+                                  Center(
+                                    child: CircularProgressIndicator(
+                                      color: myColor,
+                                    ),
+                                  )    :
+                                  CustomButton(
+                                    height: 30,
+                                    width: 200,
+                                    btnColor: myColor,
+                                    btnText: Row(
+                                      children: [
+                                        Text("Add To Fav"),
+                                        FavCubit.get(context).favList.any((element) =>element.id == cubit.allVideos[index]["id"]) ?
+                                        Icon(Icons.favorite,
+                                          size: 30,
+                                          color:
+                                          Colors.red,
+                                        ):
+                                        Icon(Icons.favorite_border,
+                                          size: 30,
+                                          color:
+                                          Colors.red,
+                                        ),
+                                      ],
+                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    ),
+                                    onPressed: (){
+                                      if(FavCubit.get(context).favList.any((element) =>element.id == cubit.allVideos[index]["id"])){
+                                        ToastConfig.showToast(
+                                          msg: "this product already in fav ..",
+                                          toastStates: ToastStates.Success,
+                                        );
+                                        // cubit.add(DeleteProductFromFavorite(id:  widget.model.productId,));
+                                      }else{
+                                        FavCubit.get(context).addToFav(
+                                            favouriteModel: FavouriteModel(
+                                              videoUrl: cubit.allVideos[index]["url"],
+                                              title: cubit.allVideos[index]["title"],
+                                              userId: SharedPreferencesHelper.getData(key: "uId"),
+                                              id:cubit.allVideos[index]["id"],
+                                            )
+                                        );
+                                        ToastConfig.showToast(
+                                          msg: "this product is added to fav ..",
+                                          toastStates: ToastStates.Success,
+                                        );
+
+                                      }
+                                    },
+                                  );
+                                }
+
+
+                            ),
+                          ],
+                        );
+                      },
+                      separatorBuilder: (context,index){
+                        return SizedBox(height: 20,);
+                      },
+                      itemCount: cubit.allVideos.length,
+                    ),
+                  );
+                },
+              )
             ],
           ),
         );

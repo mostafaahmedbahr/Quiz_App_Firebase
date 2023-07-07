@@ -73,6 +73,7 @@ class CreateNewExamCubit extends Cubit<CreateNewExamStates> {
       // Add the exam data to Firestore
       await examsRef.doc(SharedPreferencesHelper.getData(key: "uId")).set(examData);
       // Navigate to the success screen
+      SharedPreferencesHelper.removeData(key: "score");
       emit(AddNewExamSuccessState());
 
     } catch (e) {
