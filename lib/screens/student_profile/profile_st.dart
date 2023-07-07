@@ -9,8 +9,14 @@ import '../../core/toast/toast.dart';
 import 'cubit/cubit.dart';
 import 'cubit/states.dart';
 
-class StudentProfile extends StatelessWidget {
+class StudentProfile extends StatefulWidget {
   const StudentProfile({super.key});
+
+  @override
+  State<StudentProfile> createState() => _StudentProfileState();
+}
+
+class _StudentProfileState extends State<StudentProfile> {
   showAlertDialog(BuildContext context, String score) {
     Widget okButton = TextButton(
       child: Text("OK"),
@@ -36,6 +42,11 @@ class StudentProfile extends StatelessWidget {
       },
     );
   }
+  @override
+  void initState() {
+    StudentProfileCubit.get(context).getAllAnswers();
+    super.initState();
+  }
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -51,6 +62,7 @@ class StudentProfile extends StatelessWidget {
       } ,
       builder: (context,state){
         var cubit = StudentProfileCubit.get(context);
+
         return ConditionalBuilder(
           condition: state is ! GetStudentProfileDataLoadingState,
           fallback: (context)=>Center(
@@ -186,36 +198,47 @@ class StudentProfile extends StatelessWidget {
                           //   trailing: const Icon(Icons.arrow_right),
                           //   onTap: () {},
                           // ),
-                          ListTile(
-                            leading: CircleAvatar(
-                              backgroundColor: Colors.purple[50],
-                              child: IconButton(
-                                onPressed: () {
+                          ConditionalBuilder(
+                            condition: state is ! GetAllStudentsScoreLoadingState,
+                            fallback: (context)=>Center(
+                              child: CircularProgressIndicator(
+                                color: myColor,
+                              ),
+                            ),
+                            builder: (context){
+                              return ListTile(
+                                leading: CircleAvatar(
+                                  backgroundColor: Colors.purple[50],
+                                  child: IconButton(
+                                    onPressed: () {
 
-                                },
-                                icon: Icon(
-                                  Icons.dataset,
-                                  color: Colors.purple[100],
+                                    },
+                                    icon: Icon(
+                                      Icons.dataset,
+                                      color: Colors.purple[100],
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                            title: const Text(
-                              'My Score',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 18,
-                              ),
-                            ),
-                            subtitle: const Text(
-                              'Show your Score ',
-                              style: TextStyle(
-                                fontSize: 15,
-                              ),
-                            ),
-                            trailing: const Icon(Icons.arrow_right),
-                            onTap: () {
-                              showAlertDialog(context,"${cubit.allStudentAnswers[0]["correctAnswer"]} / ${cubit.allStudentAnswers[0]["total_questions"]}");
+                                title: const Text(
+                                  'My Score',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                                subtitle: const Text(
+                                  'Show your Score ',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                  ),
+                                ),
+                                trailing: const Icon(Icons.arrow_right),
+                                onTap: () {
+                                  showAlertDialog(context,"${cubit.allStudentAnswers[0]["correctAnswer"]} / ${cubit.allStudentAnswers[0]["total_questions"]}");
+                                },
+                              );
                             },
+
                           ),
                           ListTile(
                             leading: CircleAvatar(

@@ -42,4 +42,15 @@ class TestBankCubit extends Cubit<TestBankStates> {
     emit(ChangeVisState());
   }
 
+
+  int? selectedContract;
+  void changeStateChangeVis(int index) {
+    if (selectedContract != index) {
+      selectedContract = index;
+    } else {
+      selectedContract = -1;
+    }
+    emit(ChangeStateSuccess());
+  }
+
 }

@@ -7,6 +7,7 @@ class GetAllTestBankQuestionsSuccessState extends TestBankStates{}
 class GetAllTestBankQuestionsErrorState extends TestBankStates{}
 
 class ChangeVisState extends TestBankStates{}
+class ChangeStateSuccess extends TestBankStates{}
 
 
 

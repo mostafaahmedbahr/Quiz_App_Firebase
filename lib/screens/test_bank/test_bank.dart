@@ -94,7 +94,9 @@ class TextBankScreenState extends State<TextBankScreen> {
                                 ),
                               ),
                               onPressed: (){
-                                cubit.changeVis();
+                                cubit.changeStateChangeVis(index);
+                                print(index);
+                                // cubit.changeVis();
                               },
                               child: const Row(
                                 mainAxisSize: MainAxisSize.min,
@@ -119,13 +121,14 @@ class TextBankScreenState extends State<TextBankScreen> {
                            const  SizedBox(
                               height: 10,
                             ),
-                            if (cubit.isVisible)
+                            if(cubit.selectedContract == index)
+                            // if (cubit.isVisible)
                               Container(
                                 height: 30,
                                 margin: const EdgeInsets.only(left: 20),
                                 padding: const EdgeInsets.only(top: 8),
                                 child: Text('${cubit.allQuestions[index]["correct_answer"]}'),
-                              ),
+                              ) ,
                           ],
                         ),
                       ),
