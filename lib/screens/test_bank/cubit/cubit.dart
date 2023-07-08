@@ -24,6 +24,7 @@ class TestBankCubit extends Cubit<TestBankStates> {
     {
       allQuestions = querySnapshot.docs.map((doc) => doc.data()).toList();
       print(allQuestions);
+      print(allQuestions[0]["answers "]);
       print("00000000001111111111");
       emit(GetAllTestBankQuestionsSuccessState());
     }).catchError((error)

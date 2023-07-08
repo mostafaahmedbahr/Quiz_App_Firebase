@@ -65,7 +65,7 @@ class TextBankScreenState extends State<TextBankScreen> {
                                     ),
                                   ),
                                   TextSpan(
-                                    text: "${cubit.allQuestions[index]["question"]}",
+                                    text: "${cubit.allQuestions[index]["question "]}",
                                     style: const TextStyle(
                                       fontSize: 18,
                                       color: Color.fromRGBO(99, 9, 167, 1),
@@ -76,10 +76,10 @@ class TextBankScreenState extends State<TextBankScreen> {
                               ),
                             ),
                             const Padding(padding: EdgeInsets.all(10)),
-                            Text('a) ${cubit.allQuestions[index]["answers"][0]}'),
-                            Text('b) ${cubit.allQuestions[index]["answers"][1]}'),
-                            Text('c) ${cubit.allQuestions[index]["answers"][2]}'),
-                            Text('d) ${cubit.allQuestions[index]["answers"][3]}'),
+                            Text('a) ${cubit.allQuestions[index]["answers "][0]}'),
+                            Text('b) ${cubit.allQuestions[index]["answers "][1]}'),
+                            Text('c) ${cubit.allQuestions[index]["answers "][2]}'),
+                            Text('d) ${cubit.allQuestions[index]["answers "][3]}'),
                             const Padding(padding: EdgeInsets.all(10)),
                             ElevatedButton(
                               style: ButtonStyle(

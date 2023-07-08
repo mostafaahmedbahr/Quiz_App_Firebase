@@ -77,8 +77,8 @@ class _StudentScoreState extends State<StudentScore> {
                               child: OriginalButton(
                                 text: 'View Results',
                                 onPressed: () {
-                                  eController.text = "ggg";
-                                  cController.text = "asas";
+                                  // eController.text = "ggg";
+                                  // cController.text = "asas";
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
