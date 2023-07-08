@@ -7,13 +7,12 @@ import 'package:quiz_app_new/screens/layout/cubit/cubit.dart';
 import 'package:quiz_app_new/screens/student_home/cubit/states.dart';
 import 'package:quiz_app_new/widgets/custom_button.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
- import '../../Sh/shared_pref.dart';
+import '../../Sh/shared_pref.dart';
 import '../../core/toast/toast_states.dart';
 import '../../models/fav_model.dart';
 import '../fav/cubit/cubit.dart';
 import '../layout/nav_bar.dart';
 import '../../conctant.dart';
- import '../student_quiz/examas.dart';
 import '../student_quiz/quiz_page.dart';
 import '../students_lectuers/lecture_screen.dart';
 import '../test_bank/test_bank.dart';
@@ -32,11 +31,13 @@ class _HomeState extends State<Home> {
     StudentHomeCubit.get(context).getAllVideos();
     super.initState();
   }
+
   String? urlVideo;
   YoutubePlayerController? controller;
+
   g({
     required String url,
-  }){
+  }) {
     final videoId = YoutubePlayer.convertUrlToId("$url");
     controller = YoutubePlayerController(
       initialVideoId: videoId!,
@@ -46,24 +47,24 @@ class _HomeState extends State<Home> {
     );
   }
 
-
   final List<String> videoUrls = [
     // Add your YouTube video URLs here
     "https://www.youtube.com/watch?v=video1",
     "https://www.youtube.com/watch?v=video2",
     "https://www.youtube.com/watch?v=video3",
   ];
+
   @override
   Widget build(BuildContext context) {
     // ignore: unused_local_variable
     Size size = MediaQuery.of(context).size;
-    return BlocConsumer<StudentHomeCubit,StudentHomeStates>(
-      listener:(context,state){},
-      builder: (context,state){
+    return BlocConsumer<StudentHomeCubit, StudentHomeStates>(
+      listener: (context, state) {},
+      builder: (context, state) {
         print(SharedPreferencesHelper.getData(key: "score"));
         var cubit = StudentHomeCubit.get(context);
         return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20,horizontal: 20),
+          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
           child: Column(
             children: [
               const SizedBox(height: 10),
@@ -89,63 +90,66 @@ class _HomeState extends State<Home> {
                 title: 'WELCOME',
               ),
               const SizedBox(height: 10),
-              if(cubit.studentProfileModel!=null)
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    ConditionalBuilder(
-                      condition: state is ! GetStudentProfileDataLoadingState,
-                      fallback: (context)=>Center(
-                        child: CircularProgressIndicator(
-                          color: myColor,
-                        ),
-                      ),
-                      builder: (context){
-                        return Padding(
-                          padding:const EdgeInsets.only(left: kDefaultPadding / 4),
-                          child: Text(
-                            cubit.studentProfileModel!.name!=null ?
-                            "${cubit.studentProfileModel!.name}" :
-                            'Shimaa Ahmed',
-                            style: const TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                              color: kTextColor,
-                            ),
+              if (cubit.studentProfileModel != null)
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ConditionalBuilder(
+                        condition: state is! GetStudentProfileDataLoadingState,
+                        fallback: (context) => Center(
+                          child: CircularProgressIndicator(
+                            color: myColor,
                           ),
-                        );
-                      },
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 20,bottom: 20),
-                      child: IconButton(
-                        onPressed: () {
-                          NavBarCubit.currentIndex=2;
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (BuildContext context) => const Layout(),
+                        ),
+                        builder: (context) {
+                          return Padding(
+                            padding: const EdgeInsets.only(
+                                left: kDefaultPadding / 4),
+                            child: Text(
+                              cubit.studentProfileModel!.name != null
+                                  ? "${cubit.studentProfileModel!.name}"
+                                  : 'Shimaa Ahmed',
+                              style: const TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: kTextColor,
+                              ),
                             ),
                           );
                         },
-                        icon: const Icon(
-                          Icons.account_circle,
-                          color: kPrimartColor,
-                          size: 50,
-                        ),
-                        constraints: const BoxConstraints(minWidth: 0),
                       ),
-                    ),
-                  ],
+                      Padding(
+                        padding: const EdgeInsets.only(right: 20, bottom: 20),
+                        child: IconButton(
+                          onPressed: () {
+                            NavBarCubit.currentIndex = 2;
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    const Layout(),
+                              ),
+                            );
+                          },
+                          icon: const Icon(
+                            Icons.account_circle,
+                            color: kPrimartColor,
+                            size: 50,
+                          ),
+                          constraints: const BoxConstraints(minWidth: 0),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
               const SizedBox(height: 20),
               Container(
                 alignment: Alignment.center,
                 margin: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
                 padding:
-                const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+                    const EdgeInsets.symmetric(horizontal: kDefaultPadding),
                 height: 54,
                 decoration: BoxDecoration(
                     color: Colors.white,
@@ -186,15 +190,17 @@ class _HomeState extends State<Home> {
                     Expanded(
                       child: InkWell(
                         onTap: () {
-                          Navigator.of(context).push(
-                              MaterialPageRoute(builder: (BuildContext context) => const TextBankScreen()));
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  const TextBankScreen()));
                         },
                         child: Container(
                           padding: const EdgeInsets.all(kDefaultPadding / 2),
                           height: 100,
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius: const BorderRadius.all(Radius.circular(10)),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(10)),
                             boxShadow: [
                               BoxShadow(
                                 offset: const Offset(0, 10),
@@ -231,15 +237,16 @@ class _HomeState extends State<Home> {
                     Expanded(
                       child: InkWell(
                         onTap: () {
-                          Navigator.of(context).push(
-                              MaterialPageRoute(builder: (BuildContext context) =>   QuizPage()));
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (BuildContext context) => QuizPage()));
                         },
                         child: Container(
                           padding: const EdgeInsets.all(kDefaultPadding / 2),
                           height: 100,
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius: const BorderRadius.all(Radius.circular(10)),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(10)),
                             boxShadow: [
                               BoxShadow(
                                 offset: const Offset(0, 10),
@@ -276,8 +283,9 @@ class _HomeState extends State<Home> {
                     Expanded(
                       child: InkWell(
                         onTap: () {
-                          Navigator.of(context).push(
-                              MaterialPageRoute(builder: (BuildContext context) => const Lecture()));
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  const Lecture()));
                         },
                         child: Container(
                           padding: const EdgeInsets.all(kDefaultPadding / 2),
@@ -434,20 +442,19 @@ class _HomeState extends State<Home> {
               // ),
 //
               ConditionalBuilder(
-                condition: state is  GetAllVidoesSuccessState,
-                fallback: (context)=>Center(
+                condition: state is GetAllVidoesSuccessState,
+                fallback: (context) => Center(
                   child: CircularProgressIndicator(
                     color: myColor,
                   ),
                 ),
-                builder: (context){
+                builder: (context) {
                   return Expanded(
                     child: ListView.separated(
                       scrollDirection: Axis.vertical,
-                      itemBuilder: (context,index)
-                      {
+                      itemBuilder: (context, index) {
                         g(url: "${cubit.allVideos[index]["url"]}");
-                        return   Column(
+                        return Column(
                           children: [
                             Container(
                               decoration: BoxDecoration(
@@ -473,82 +480,102 @@ class _HomeState extends State<Home> {
                                 ],
                               ),
                             ),
-                            SizedBox(height: 20,),
-                            StreamBuilder<QuerySnapshot<FavouriteModel>>(
-                              stream: FirebaseFirestore.instance
-                                  .collection("AllUsers")
-                                  .doc(SharedPreferencesHelper.getData(key: "uId"))
-                                  .collection("favourite")
-                                  .withConverter<FavouriteModel>(
-                                fromFirestore: (snapshot, options) {
-                                  print(snapshot.data());
-                                  return FavouriteModel.fromFirestore(snapshot.data()!);
-                                },
-                                toFirestore: (task, options) {
-                                  return task.toFirestore();
-                                },
-                              ).snapshots(),
-                                builder: (buildContext, snapshot) {
-                                  return  cubit.allVideos.length==0 ?
-                                  Center(
-                                    child: CircularProgressIndicator(
-                                      color: myColor,
-                                    ),
-                                  )    :
-                                  CustomButton(
-                                    height: 30,
-                                    width: 200,
-                                    btnColor: myColor,
-                                    btnText: Row(
-                                      children: [
-                                        Text("Add To Fav"),
-                                        FavCubit.get(context).favList.any((element) =>element.id == cubit.allVideos[index]["id"]) ?
-                                        Icon(Icons.favorite,
-                                          size: 30,
-                                          color:
-                                          Colors.red,
-                                        ):
-                                        Icon(Icons.favorite_border,
-                                          size: 30,
-                                          color:
-                                          Colors.red,
-                                        ),
-                                      ],
-                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                    ),
-                                    onPressed: (){
-                                      if(FavCubit.get(context).favList.any((element) =>element.id == cubit.allVideos[index]["id"])){
-                                        ToastConfig.showToast(
-                                          msg: "this product already in fav ..",
-                                          toastStates: ToastStates.Success,
-                                        );
-                                        // cubit.add(DeleteProductFromFavorite(id:  widget.model.productId,));
-                                      }else{
-                                        FavCubit.get(context).addToFav(
-                                            favouriteModel: FavouriteModel(
-                                              videoUrl: cubit.allVideos[index]["url"],
-                                              title: cubit.allVideos[index]["title"],
-                                              userId: SharedPreferencesHelper.getData(key: "uId"),
-                                              id:cubit.allVideos[index]["id"],
-                                            )
-                                        );
-                                        ToastConfig.showToast(
-                                          msg: "this product is added to fav ..",
-                                          toastStates: ToastStates.Success,
-                                        );
-
-                                      }
-                                    },
-                                  );
-                                }
-
-
+                            SizedBox(
+                              height: 20,
                             ),
+                            StreamBuilder<QuerySnapshot<FavouriteModel>>(
+                                stream: FirebaseFirestore.instance
+                                    .collection("AllUsers")
+                                    .doc(SharedPreferencesHelper.getData(
+                                        key: "uId"))
+                                    .collection("favourite")
+                                    .withConverter<FavouriteModel>(
+                                  fromFirestore: (snapshot, options) {
+                                    print(snapshot.data());
+                                    return FavouriteModel.fromFirestore(
+                                        snapshot.data()!);
+                                  },
+                                  toFirestore: (task, options) {
+                                    return task.toFirestore();
+                                  },
+                                ).snapshots(),
+                                builder: (buildContext, snapshot) {
+                                  return cubit.allVideos.length == 0
+                                      ? Center(
+                                          child: CircularProgressIndicator(
+                                            color: myColor,
+                                          ),
+                                        )
+                                      : CustomButton(
+                                          height: 30,
+                                          width: 200,
+                                          btnColor: myColor,
+                                          btnText: Row(
+                                            children: [
+                                              Text("Add To Fav"),
+                                              FavCubit.get(context).favList.any(
+                                                      (element) =>
+                                                          element.id ==
+                                                          cubit.allVideos[index]
+                                                              ["id"])
+                                                  ? Icon(
+                                                      Icons.favorite,
+                                                      size: 30,
+                                                      color: Colors.red,
+                                                    )
+                                                  : Icon(
+                                                      Icons.favorite_border,
+                                                      size: 30,
+                                                      color: Colors.red,
+                                                    ),
+                                            ],
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                          ),
+                                          onPressed: () {
+                                            if (FavCubit.get(context)
+                                                .favList
+                                                .any((element) =>
+                                                    element.id ==
+                                                    cubit.allVideos[index]
+                                                        ["id"])) {
+                                              ToastConfig.showToast(
+                                                msg:
+                                                    "this product already in fav ..",
+                                                toastStates:
+                                                    ToastStates.Success,
+                                              );
+                                              // cubit.add(DeleteProductFromFavorite(id:  widget.model.productId,));
+                                            } else {
+                                              FavCubit.get(context).addToFav(
+                                                  favouriteModel:
+                                                      FavouriteModel(
+                                                videoUrl: cubit.allVideos[index]
+                                                    ["url"],
+                                                title: cubit.allVideos[index]
+                                                    ["title"],
+                                                userId: SharedPreferencesHelper
+                                                    .getData(key: "uId"),
+                                                id: cubit.allVideos[index]
+                                                    ["id"],
+                                              ));
+                                              ToastConfig.showToast(
+                                                msg:
+                                                    "this product is added to fav ..",
+                                                toastStates:
+                                                    ToastStates.Success,
+                                              );
+                                            }
+                                          },
+                                        );
+                                }),
                           ],
                         );
                       },
-                      separatorBuilder: (context,index){
-                        return SizedBox(height: 20,);
+                      separatorBuilder: (context, index) {
+                        return SizedBox(
+                          height: 20,
+                        );
                       },
                       itemCount: cubit.allVideos.length,
                     ),
@@ -558,8 +585,7 @@ class _HomeState extends State<Home> {
             ],
           ),
         );
-      } ,
-
+      },
     );
   }
 }
@@ -603,12 +629,12 @@ class TitleWithCustomUnderLine extends StatelessWidget {
             padding: const EdgeInsets.only(left: kDefaultPadding / 4),
             child: Text(
               text,
-              style: const TextStyle(fontSize: 24,
+              style: const TextStyle(
+                fontSize: 24,
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.normal,
                 color: kPrimartColor,
               ),
-
             ),
           ),
           Positioned(
@@ -635,6 +661,7 @@ class RecomandCourse extends StatelessWidget {
     required this.image,
     required this.press,
   });
+
   final String title;
   final String image;
   final Function press;
@@ -657,9 +684,7 @@ class RecomandCourse extends StatelessWidget {
             Navigator.of(context).pushReplacement(MaterialPageRoute(
                 builder: (BuildContext context) => const Lecture()));
           },
-
           // onTap: (){press;},
-
           child: Container(
             padding: const EdgeInsets.all(kDefaultPadding / 2),
             decoration: BoxDecoration(
