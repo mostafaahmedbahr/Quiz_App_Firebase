@@ -13,8 +13,8 @@ import 'package:quiz_app_new/screens/layout/nav_bar.dart';
 import 'package:quiz_app_new/screens/login/login_cubit/cubit.dart';
 import 'package:quiz_app_new/screens/student_home/cubit/cubit.dart';
 import 'package:quiz_app_new/screens/student_profile/cubit/cubit.dart';
-import 'package:responsive_framework/responsive_wrapper.dart';
-import 'package:responsive_framework/utils/scroll_behavior.dart';
+import 'package:responsive_framework/responsive_framework.dart';
+
 import 'Sh/bloc_observer.dart';
 import 'Sh/shared_pref.dart';
 import 'screens/splash/splash_screen.dart';
@@ -91,17 +91,13 @@ class MyApp extends StatelessWidget {
         SharedPreferencesHelper.getData(key: "uId")==null ?  const SplashScreen() :
         SharedPreferencesHelper.getData(key: "uId")!=null && SharedPreferencesHelper.getData(key: "isAdmin") ==true ? AdminHome():
         Layout(),
-        builder: (context, child) => ResponsiveWrapper.builder(
-          BouncingScrollWrapper.builder(context, child!),
-          maxWidth: 1200,
-          minWidth: 450,
-          defaultScale: true,
+        builder: (context, child) => ResponsiveBreakpoints.builder(
+          child: child!,
           breakpoints: [
-            const ResponsiveBreakpoint.resize(450, name: MOBILE),
-            const ResponsiveBreakpoint.autoScale(800, name: TABLET),
-            const ResponsiveBreakpoint.autoScale(1000, name: TABLET),
-            const ResponsiveBreakpoint.resize(1200, name: DESKTOP),
-            const ResponsiveBreakpoint.autoScale(2460, name: "4K"),
+            const Breakpoint(start: 0, end: 450, name: MOBILE),
+            const Breakpoint(start: 451, end: 800, name: TABLET),
+            const Breakpoint(start: 801, end: 1920, name: DESKTOP),
+            const Breakpoint(start: 1921, end: double.infinity, name: '4K'),
           ],
         ),
       ),
